@@ -1,12 +1,10 @@
-var ab=false;
 var createColorPalette = function(context) {
 	doc = context.document;
 	var app = NSApplication.sharedApplication();
 	var appController= app.delegate();
 
-
 	//Get document colors array
-	var colors = doc.documentData().assets().primitiveColors();
+	colors = doc.documentData().assets().primitiveColors();
 		palette = colors.array(); 
 
 	//Run only if there are colors
@@ -28,9 +26,10 @@ var addArtboard =function (context) {
 	frame.setWidth(300)
 	frame.setHeight((65*palette.count()))
 	[artboard_palette setName: 'ShareableColorPalette'];
+
+	//Ads artboard to page
 	doc.currentPage().addLayers([artboard_palette]);
 		
-	makeExportable();
 	updateColorPalette();
 
 }
@@ -40,7 +39,6 @@ var addColorGroup = function (color,height,width){
 		//Create layer group
 		var layergroup = [artboard_palette addLayerOfType: "group"];
     	[layergroup setName: (color+1) + ".- #" + palette[color].hexValue() ];
-
 
 		//Create rectangle 
   		var colorbg = [layergroup addLayerOfType: "rectangle"];
@@ -56,7 +54,6 @@ var addColorGroup = function (color,height,width){
     	//Add background color
     	var fill = colorbg.style().fills().addNewStylePart();
     	fill.color = MSColor.colorWithSVGString("#" + palette[color].hexValue());
-
 
     	//Create text layer 
     	var textlayer = [layergroup addLayerOfType: "text"];
@@ -92,24 +89,23 @@ var addColorGroup = function (color,height,width){
     	textlayer.setTextColor(MSColor.colorWithSVGString("#" + textcolor));
 
     	//Resizes the layer group to fit the background and the text layers
-
     	layergroup.resizeToFitChildrenWithOption(1);
 
   return;
 }
 
-function makeExportable(){
-	slice = artboard_palette.exportOptions().addExportFormat()
-	slice.setFileFormat('PDF')
-	return slice
-}
-
 function updateColorPalette(){
-
 	//Creates color group for each color in the Documents Colors array and sets artboard size
 	for (i = 0; i < palette.count(); i++) {
 		addColorGroup(i,65,300);
 			};
-
 	frame.setHeight((65*palette.count()))
 }
+
+//Creates export but does not create a slice. 
+/*function makeExportable(){
+	slice = artboard_palette.exportOptions().addExportFormat()
+	slice.setFileFormat('PDF')
+	return slice
+}
+*/
