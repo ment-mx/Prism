@@ -3,7 +3,7 @@
   "description": "Creates a new artboard with all the colors and HEX values for 'Document Colors' palette.",
   "author": "Lalo Mrtnz",
   "homepage": "",
-  "version": "1.0",
+  "version": "1.5",
   "identifier": "com.lalomrtnz.sketch.shareable-color-palette",
   "compatibleVersion": "3.5.2",
   "bundleVersion": "1.0",
