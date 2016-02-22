@@ -1,9 +1,9 @@
 {
   "name": "Shareable Color Palette",
   "description": "Creates a new artboard with all the colors and HEX values for 'Document Colors' palette.",
-  "author": "Lalo Mrtnz",
+  "author": "Lalo Mrtnz & Adrxx",
   "homepage": "https://github.com/LaloMrtnz/ShareableColorPalette",
-  "version": "1.5",
+  "version": "2.0",
   "identifier": "com.lalomrtnz.sketch.shareable-color-palette",
   "compatibleVersion": "3.5.2",
   "bundleVersion": "1.0",
@@ -24,5 +24,5 @@
     "isRoot": true,
     "title" : "Shareable Color Palette"
   },
- 
+
 }
