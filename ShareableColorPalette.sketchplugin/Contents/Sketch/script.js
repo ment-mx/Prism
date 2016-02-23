@@ -1,5 +1,4 @@
  @import "color_classifier.js";
- @import "sass_generator.js";
 
  var createColorPalette = function(context) {
 
@@ -29,7 +28,6 @@
 			addArtboard(context,width,height);
 		}
 
-    generateSASS();
 	}
 
 }
@@ -127,7 +125,7 @@ function updateColorPalette(width,height){
 
 	//Removes layers in the ShareableColorPalette artboard
 		if (layers.count()>0){
-			for (var i=1; i<(layers.count()+i); i++){
+			for (var i=1; i < (layers.count()+i) ; i++){
 			var parent = [[layer objectAtIndex:0] parentGroup];
   			if (parent)[parent removeLayer: [layer objectAtIndex:0]];
 		}

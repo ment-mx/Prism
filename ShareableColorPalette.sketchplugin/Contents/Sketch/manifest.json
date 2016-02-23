@@ -15,11 +15,19 @@
       "shortcut" : "cmd ctrl c",
       "name" : "Create Shareable Color Palette",
       "identifier" : "shareablecolorpalette"
+    },
+    {
+      "name": "Generate SASS Color Palette",
+      "identifier": "generateSASS",
+      "shortcut": "",
+      "script": "sass_generator.js",
+      "handler": "generateSASS"
     }
   ],
   "menu" : {
     "items" : [
-      "shareablecolorpalette"
+      "shareablecolorpalette",
+      "generateSASS"
     ],
     "isRoot": true,
     "title" : "Shareable Color Palette"
