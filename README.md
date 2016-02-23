@@ -7,10 +7,6 @@ A SketchApp plugin that creates an artboard with all the colors on your "Documen
 3. Run command [cmd ctrl c]
 4. Get your *Shareable Color Palette* with HEX values and color names. 
 
-![Example palette] 
-(https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/Screen%20Shot%202016-02-22%20at%205.48.31%20PM.png =100px)
-
-
 ![Example image] 
 (https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/ShareableColorPalette.gif)
 
