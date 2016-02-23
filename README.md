@@ -15,10 +15,11 @@ A SketchApp plugin that creates an artboard with all the colors on your "Documen
 - [x] Create color palette based on 'Document Colors' palette 
 - [x] Updates palette each time the command is run.
 - [x] Give specific color name
+- [x] Export colors in SASS file
 - [ ] Live update
-- [ ] Export colors in SASS file
 
 
 <h2>Special Thanks</h2>
 - To @Adrxx for cleaning my ugly code and adding the color name function. 
 - To [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset. 
+- To [andrewfiorillo](https://github.com/andrewfiorillo) for his Save Dialog code.
