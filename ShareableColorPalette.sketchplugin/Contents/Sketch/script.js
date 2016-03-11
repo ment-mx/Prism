@@ -8,8 +8,9 @@
 	var app = NSApplication.sharedApplication();
 	var appController= app.delegate();
 
-	width = 300;
-	height = 65;
+	width = 200;
+	height = 200;
+	color_margin= 35;
 
 	//Get document colors array
 	colors = doc.documentData().assets().primitiveColors();
@@ -51,73 +52,139 @@ function addArtboard(context,width,height) {
 	var content_x = content.origin.x
 	var content_y = content.origin.y
 
-	var margin = 100;
+	var margin = 200;
 
+	//Sets Artboard Frame
 	var frame = artboard_palette.frame()
-	frame.setX(content_x-(width + margin))
-	frame.setY(content_y)
-	frame.setWidth(width)
+	frame.setX(content_x)
+	frame.setY(content_y-(height + margin))
+	frame.setWidth(((width+color_margin)*palette.count())+ color_margin)
 
-	frame.setHeight((height*palette.count()))
 	[artboard_palette setName: 'ShareableColorPalette'];
 
 	//Ads artboard to page
 	doc.currentPage().addLayers([artboard_palette]);
 
 	updateColorPalette(width,height);
+	//makeExportable(artboard_palette)
+}
+function getColorStringWithAlpha(color){
+
+      var red = Math.round(color.red() * 255)
+      var green = Math.round(color.green() * 255)
+      var blue = Math.round(color.blue() * 255)
+      var alpha = color.alpha()
+
+      return ("rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")")
 }
 
-
 function addColorGroup (color,height,width){
-		//Create layer group
 
-    var hexString = "#" + palette[color].hexValue();
+	//Create layer group
+    var hexString = "#" + palette[color].hexValue()
+   	var rgbaString = getColorStringWithAlpha(palette[color])
 
     var namedColor = classifier.classify(hexString);
-		var layergroup = [artboard_palette addLayerOfType: "group"];
+	var layergroup = [artboard_palette addLayerOfType: "group"];
     [layergroup setName: namedColor + ": " + hexString ];
     	layergroup.setIsLocked(true)
 
-		//Create rectangle
-  	colorbg = [layergroup addLayerOfType: "rectangle"];
-    [colorbg setName: "background" + (color+1) ];
+    //Adds shadow to the group
+  	var groupshadow = layergroup.style().shadows().addNewStylePart();
+  	groupshadow.offsetX = 0
+  	groupshadow.offsetY = 3
+  	groupshadow.blurRadius = 6
+  	groupshadow.spread = 0
+  	groupshadow.color = MSColor.colorWithRed_green_blue_alpha(0,0,0.0,0.25)
+
+	//Create color rectangle
+  	var colorbg = [layergroup addLayerOfType: "rectangle"];
+    [colorbg setName: "" + " " +hexString ]
 
     	//Define size and position
     var rectframe = colorbg.frame()
-		rectframe.setX(0)
-		rectframe.setY(color*height)
+
 		rectframe.setWidth(width)
 		rectframe.setHeight(height)
+		rectframe.setY(color_margin)
+
+		if (color == 0){
+			rectframe.setX(color_margin)
+		}else
+		{
+			rectframe.setX(color*(width + color_margin)+color_margin)
+		}
 
   	//Add background color
-  	var fill = colorbg.style().fills().addNewStylePart();
-  	fill.color = MSColor.colorWithSVGString(hexString);
+  	var colorbgfill = colorbg.style().fills().addNewStylePart();
+  	colorbgfill.color = MSColor.colorWithSVGString(hexString);
 
-  	//Create text layer
-  	var textlayer = [layergroup addLayerOfType: "text"];
-  	[textlayer setName: namedColor + ": " + hexString ];
+//TEXT LAYERS
+	
+  	//Create data group
+  	var datagroup = [layergroup addLayerOfType: "group"];
+    [datagroup setName: hexString ]
 
-	//Defines center based on the rectangle
-  	var rectmidx = [rectframe midX]
-  	var rectmidy = [rectframe midY]
+    //Text layers Background
+	var textbg = [datagroup addLayerOfType: "rectangle"];
+    [textbg setName: "Data Background " + (color+1)]
 
-  	//Position
-  	var textframe = textlayer.frame()
-  	textframe.setMidX(rectmidx)
-  	textframe.setMidY(rectmidy)
+    var textbgframe = textbg.frame()
+		textbgframe.setWidth(width)
+		textbgframe.setY([rectframe y] + [rectframe height])
+		textbgframe.setX([rectframe x])
 
-  	//Sets text visual properties
-  	textlayer.stringValue = namedColor + ": " + hexString;
-  	textlayer.setTextAlignment(2)
-  	textlayer.setFontSize(14)
+  	//Add background color
+  	var textbgfill = textbg.style().fills().addNewStylePart();
+  	textbgfill.color = MSColor.colorWithSVGString("#ffffff");
 
-    //Sets text color depending on background: NOW WORKS AS EXPECTED BITCHES...
-  	textlayer.setTextColor(MSColor.colorWithSVGString( contrastedColor(hexString) ));
+    //Named Color Layer
+	var namedLayer = newTextLayer(datagroup, namedColor, colorbg, 11, 15, namedColor, 0, 16,"Helvetica-Bold","#000000")
+
+	//Hex Color Layer
+	var hexLayer = newTextLayer(datagroup, hexString, namedLayer, 3, 0, hexString, 0, 13, "Helvetica-Oblique", "#444444")
+
+	//RGB Color Layer
+	var rgbLayer = newTextLayer(datagroup, rgbaString, hexLayer, 3, 0 , rgbaString, 0, 14, "Helvetica-Oblique", "#444444" )
+	var rgbframe = rgbLayer.frame()
+
+	//Sets Text Background Height
+	textbgframe.setHeight(([rgbframe y]+[rgbframe height]) - ([rectframe y] + [rectframe height])+ 14)
 
   	//Resizes the layer group to fit the background and the text layers
   	layergroup.resizeToFitChildrenWithOption(1);
+  	datagroup.resizeToFitChildrenWithOption(1);
+
+  	//Sets group height to adapt artboard
+	colorGroupHeight = ([textbgframe height] + [rectframe height])
 
 }
+
+
+function newTextLayer(parent, name, aligner, margintop, marginleft, text, textalignment, fontsize, fontname, fontcolor){
+
+  	//Creates new layer & appends it to parent
+  	var newlayer = [parent addLayerOfType: "text"];
+  	[newlayer setName: name ];
+
+  	//Positions based on aligner
+  	var alignerframe = aligner.frame()
+
+  	var layerframe = newlayer.frame()
+  	layerframe.setX([alignerframe x] + marginleft)
+  	layerframe.setY([alignerframe y] + [alignerframe height] + margintop)
+
+  	//Sets text visual properties
+  	newlayer.stringValue = text;
+  	newlayer.setTextAlignment(textalignment)
+  	newlayer.setFontSize(fontsize)
+  	newlayer.setFontPostscriptName(fontname)
+  	newlayer.setTextColor(MSColor.colorWithSVGString(fontcolor ));
+  	return newlayer
+
+    //Sets text color depending on background: NOW WORKS AS EXPECTED BITCHES...
+  	//textlayer.setTextColor(MSColor.colorWithSVGString( contrastedColor(hexString) ));
+  	}
 
 function updateColorPalette(width,height){
 	var layer = [artboard_palette layers]
@@ -131,19 +198,28 @@ function updateColorPalette(width,height){
 		}
 	}
 
+	//Sets Artboard Background
+	var artboardbg = [artboard_palette addLayerOfType: "rectangle"];
+    [artboardbg setName: "Artboard Background"]
+	
+	var artboardfill = artboardbg.style().fills().addNewStylePart();
+  	artboardfill.color = MSColor.colorWithRed_green_blue_alpha(.95, .95, .95, 1)
+
+
 	//Creates color group for each color in the Documents Colors array and sets artboard size
 	for (var i = 0; i < palette.count(); i++) {
 		addColorGroup(i,height,width);
 	}
 
-	artboard_palette.frame().setHeight((height*palette.count()))
+	var artPalette = artboard_palette.frame()
+	artPalette.setWidth(((width+color_margin)*palette.count())+ color_margin)
+	artPalette.setHeight((colorGroupHeight +( 2*color_margin)))
+	artboardbg.frame().setWidth([artPalette width])
+	artboardbg.frame().setHeight([artPalette height])
 }
 
-
-/*
 //Creates export but does not create a slice.
-function makeExportable(layer){
-	log('starslice')
+/*	log('starslice')
 	aslice= layer.slice()
 	exportslice = aslice.exportOptions().addExportFormat()
 	exportslice.setFileFormat('PDF')
@@ -209,5 +285,3 @@ function contrastedColor(col) {
   return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 
 }
-
-

@@ -1,5 +1,5 @@
 <h1>ShareableColorPalette</h1>
-A SketchApp plugin that creates an artboard with all the colors on your "Document Colors Palette" that you can export as a PDF. 
+A SketchApp plugin that creates an artboard with your "Document Colors Palette's" HEX and rgba values. You can either export a pdf to share or a JSON/SASS file with the color values. 
 
 <h2>Usage</h2>
 1. Install plugin
@@ -8,15 +8,17 @@ A SketchApp plugin that creates an artboard with all the colors on your "Documen
 4. Get your *Shareable Color Palette* with HEX values and color names. 
 
 ![Example image] 
-(https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/ShareableColorPalette.gif)
+(https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/ShareableColorPalette.png)
 
 
 <h2>Functions</h2>
 - [x] Create color palette based on 'Document Colors' palette 
-- [x] Updates palette each time the command is run.
-- [x] Give specific color name
-- [x] Export colors in SASS file
-- [ ] Live update
+- [x] Palette update
+- [x] Give specific color names
+- [x] Generate HEX color values
+- [x] Generate rgba color values
+- [x] Export colors in JSON/SASS file
+
 
 
 <h2>Special Thanks</h2>
