@@ -44,14 +44,13 @@ function paletteExists(){
 }
 
 function addArtboard(context,width,height) {
-
 	//Creates a new arboard
 	artboard_palette = MSArtboardGroup.new();
 
+	//Gets all the other layers bounds
 	var content = doc.currentPage().contentBounds();
 	var content_x = content.origin.x
 	var content_y = content.origin.y
-
 	var margin = 200;
 
 	//Sets Artboard Frame
@@ -60,13 +59,15 @@ function addArtboard(context,width,height) {
 	frame.setY(content_y-(height + margin))
 	frame.setWidth(((width+color_margin)*palette.count())+ color_margin)
 
+	//Sets Arboard Background Color 
+	artboard_palette.hasBackgroundColor= true
+	artboard_palette.backgroundColor = MSColor.colorWithRed_green_blue_alpha(.95, .95, .95, 1)
+
 	[artboard_palette setName: 'ShareableColorPalette'];
 
 	//Ads artboard to page
 	doc.currentPage().addLayers([artboard_palette]);
-
 	updateColorPalette(width,height);
-	//makeExportable(artboard_palette)
 }
 function getColorStringWithAlpha(color){
 
@@ -74,7 +75,6 @@ function getColorStringWithAlpha(color){
       var green = Math.round(color.green() * 255)
       var blue = Math.round(color.blue() * 255)
       var alpha = color.alpha()
-
       return ("rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")")
 }
 
@@ -87,7 +87,7 @@ function addColorGroup (color,height,width){
     var namedColor = classifier.classify(hexString);
 	var layergroup = [artboard_palette addLayerOfType: "group"];
     [layergroup setName: namedColor + ": " + hexString ];
-    	layergroup.setIsLocked(true)
+    layergroup.setIsLocked(true)
 
     //Adds shadow to the group
   	var groupshadow = layergroup.style().shadows().addNewStylePart();
@@ -101,25 +101,17 @@ function addColorGroup (color,height,width){
   	var colorbg = [layergroup addLayerOfType: "rectangle"];
     [colorbg setName: "" + " " +hexString ]
 
-    	//Define size and position
+    //Define size and position
     var rectframe = colorbg.frame()
 
 		rectframe.setWidth(width)
 		rectframe.setHeight(height)
 		rectframe.setY(color_margin)
-
-		if (color == 0){
-			rectframe.setX(color_margin)
-		}else
-		{
-			rectframe.setX(color*(width + color_margin)+color_margin)
-		}
+		rectframe.setX(color*(width + color_margin)+color_margin)
 
   	//Add background color
   	var colorbgfill = colorbg.style().fills().addNewStylePart();
   	colorbgfill.color = MSColor.colorWithSVGString(hexString);
-
-//TEXT LAYERS
 	
   	//Create data group
   	var datagroup = [layergroup addLayerOfType: "group"];
@@ -134,17 +126,17 @@ function addColorGroup (color,height,width){
 		textbgframe.setY([rectframe y] + [rectframe height])
 		textbgframe.setX([rectframe x])
 
-  	//Add background color
+  	//Add data background color
   	var textbgfill = textbg.style().fills().addNewStylePart();
   	textbgfill.color = MSColor.colorWithSVGString("#ffffff");
 
-    //Named Color Layer
+    //Named Color Text Layer
 	var namedLayer = newTextLayer(datagroup, namedColor, colorbg, 11, 15, namedColor, 0, 16,"Helvetica-Bold","#000000")
 
-	//Hex Color Layer
+	//Hex Color Text Layer
 	var hexLayer = newTextLayer(datagroup, hexString, namedLayer, 3, 0, hexString, 0, 13, "Helvetica-Oblique", "#444444")
 
-	//RGB Color Layer
+	//RGB Color Text Layer
 	var rgbLayer = newTextLayer(datagroup, rgbaString, hexLayer, 3, 0 , rgbaString, 0, 14, "Helvetica-Oblique", "#444444" )
 	var rgbframe = rgbLayer.frame()
 
@@ -157,9 +149,7 @@ function addColorGroup (color,height,width){
 
   	//Sets group height to adapt artboard
 	colorGroupHeight = ([textbgframe height] + [rectframe height])
-
 }
-
 
 function newTextLayer(parent, name, aligner, margintop, marginleft, text, textalignment, fontsize, fontname, fontcolor){
 
@@ -198,14 +188,6 @@ function updateColorPalette(width,height){
 		}
 	}
 
-	//Sets Artboard Background
-	var artboardbg = [artboard_palette addLayerOfType: "rectangle"];
-    [artboardbg setName: "Artboard Background"]
-	
-	var artboardfill = artboardbg.style().fills().addNewStylePart();
-  	artboardfill.color = MSColor.colorWithRed_green_blue_alpha(.95, .95, .95, 1)
-
-
 	//Creates color group for each color in the Documents Colors array and sets artboard size
 	for (var i = 0; i < palette.count(); i++) {
 		addColorGroup(i,height,width);
@@ -214,30 +196,8 @@ function updateColorPalette(width,height){
 	var artPalette = artboard_palette.frame()
 	artPalette.setWidth(((width+color_margin)*palette.count())+ color_margin)
 	artPalette.setHeight((colorGroupHeight +( 2*color_margin)))
-	artboardbg.frame().setWidth([artPalette width])
-	artboardbg.frame().setHeight([artPalette height])
 }
-
-//Creates export but does not create a slice.
-/*	log('starslice')
-	aslice= layer.slice()
-	exportslice = aslice.exportOptions().addExportFormat()
-	exportslice.setFileFormat('PDF')
-	return aslice
-}
-
-function createSlice(context,layer){
-
-	shareable_slice = MSSliceLayer.new();
-	var frame = layer.absoluteRect().rect();
-
-	makeExportable(shareable_slice);
-	log('created a slice:'+ shareable_slice)
-
-	doc.currentPage().addLayers([shareable_slice]);
-}
-*/
-
+/*
 //Takes BG color and makes it to a contrasted readable color
 function contrastedColor(col) {
 
@@ -285,3 +245,4 @@ function contrastedColor(col) {
   return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 
 }
+*/
