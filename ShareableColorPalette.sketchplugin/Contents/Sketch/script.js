@@ -49,15 +49,14 @@ function generateArtboard() {
   var content = doc.currentPage().contentBounds()
   var content_x = content.origin.x
   var content_y = content.origin.y
-  var margin = 200
+  var margin = 60
 
   //Sets Artboard Frame
   var frame = artboard_palette.frame()
-  frame.setX(content_x)
-  palette.count()
-  frame.setY(content_y-(height + margin))
+  frame.setX(content_x - (margin + colorMargin) -((width + colorMargin)*(colorsPerRow)))
+  frame.setY(content_y)
   frame.setWidth( (width + colorMargin) * palette.count() + colorMargin)
-
+  
   //Sets Arboard Background Color
   artboard_palette.hasBackgroundColor= true
   artboard_palette.backgroundColor = MSColor.colorWithRed_green_blue_alpha(.95, .95, .95, 1)
@@ -90,11 +89,8 @@ function updateArtboard() {
 
   var artPalette = artboard_palette.frame()
   artPalette.setWidth( (width+colorMargin) * colorsPerRow + colorMargin)
-  artPalette.setHeight( colorMargin + (colorGroupHeight + colorMargin) * Math.ceil(palette.count()/colorsPerRow) )
-
+  artPalette.setHeight(colorMargin + (layergroup.frame().height() + colorMargin) * Math.ceil(palette.count()/colorsPerRow) )
 }
-
-
 
 //=========================================
 // HELPERS
@@ -106,7 +102,7 @@ function addColorGroup (color,height,width){
   var rgbaString = getColorStringWithAlpha(palette[color])
 
   var namedColor = classifier.classify(hexString)
-  var layergroup = [artboard_palette addLayerOfType: "group"]
+  layergroup = [artboard_palette addLayerOfType: "group"]
   [layergroup setName: namedColor + ": " + hexString ]
   layergroup.setIsLocked(true)
 
@@ -173,9 +169,6 @@ function addColorGroup (color,height,width){
   //Resizes the layer group to fit the background and the text layers
   layergroup.resizeToFitChildrenWithOption(1)
   datagroup.resizeToFitChildrenWithOption(1)
-
-  //Sets group height to adapt artboard
-  colorGroupHeight = ([textbgframe height] + [rectframe height])
 }
 
 
@@ -222,7 +215,6 @@ function getColorStringWithAlpha(color){
   var alpha = color.alpha()
   return ("rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")")
 }
-
 
 /*
 //Takes BG color and makes it to a contrasted readable color
