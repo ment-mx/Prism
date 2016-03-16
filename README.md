@@ -6,6 +6,10 @@ A SketchApp plugin that creates an artboard with your "Document Colors Palette's
 2. Add *Shareable Colors* to 'Document Colors Palette'
 3. Run command [cmd ctrl c]
 4. Get your *Shareable Color Palette* with HEX values and color names. 
+5. Get SASS file with color name and values. 
+
+![How it works!] 
+(https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/Explained.gif)
 
 ![Example image] 
 (https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/ShareableColorPalette.png)
