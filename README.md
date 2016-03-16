@@ -1,5 +1,5 @@
 <h1>ShareableColorPalette</h1>
-A SketchApp plugin that creates an artboard with your "Document Colors Palette's" HEX and rgba values. You can either export a pdf to share or a JSON/SASS file with the color values. 
+A SketchApp plugin that creates an artboard with your "Document Colors Palette's" HEX and rgba values. You can either export a pdf to share or a SASS file with the color values. 
 
 <h2>Usage</h2>
 1. Install plugin
@@ -17,11 +17,11 @@ A SketchApp plugin that creates an artboard with your "Document Colors Palette's
 - [x] Give specific color names
 - [x] Generate HEX color values
 - [x] Generate rgba color values
-- [x] Export colors in JSON/SASS file
+- [x] Export colors in SASS file
 
 
 
 <h2>Special Thanks</h2>
-- To @Adrxx for cleaning my ugly code and adding the color name function. 
+- To @[Adrxx](https://github.com/Adrxx) for cleaning my ugly code and adding the color name function. 
 - To [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset. 
 - To [andrewfiorillo](https://github.com/andrewfiorillo) for his Save Dialog code.
