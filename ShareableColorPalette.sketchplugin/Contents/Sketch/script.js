@@ -7,6 +7,7 @@
 const width = 200
 const height = 200
 const colorMargin = 35
+const artboardMargin = 60
 const colorsPerRow = 4
 
 //=========================================
@@ -49,14 +50,11 @@ function generateArtboard() {
   var content = doc.currentPage().contentBounds()
   var content_x = content.origin.x
   var content_y = content.origin.y
-  var margin = 60
 
-  //Sets Artboard Frame
-  var frame = artboard_palette.frame()
-  frame.setX(content_x - (margin + colorMargin) -((width + colorMargin)*(colorsPerRow)))
-  frame.setY(content_y)
-  frame.setWidth( (width + colorMargin) * palette.count() + colorMargin)
-  
+  //Set Artboard Position and Size
+  artboard_palette.frame().setX(content_x - artboardMargin)
+  artboard_palette.frame().setY(content_y)
+
   //Sets Arboard Background Color
   artboard_palette.hasBackgroundColor= true
   artboard_palette.backgroundColor = MSColor.colorWithRed_green_blue_alpha(.95, .95, .95, 1)
@@ -84,19 +82,17 @@ function updateArtboard() {
 
   //Creates color group for each color in the Documents Colors array and sets artboard size
   for (var i = 0; i < palette.count(); i++) {
-    addColorGroup(i,height,width)
+    addColorGroup(i)
   }
 
-  var artPalette = artboard_palette.frame()
-  artPalette.setWidth( (width+colorMargin) * colorsPerRow + colorMargin)
-  artPalette.setHeight(colorMargin + (layergroup.frame().height() + colorMargin) * Math.ceil(palette.count()/colorsPerRow) )
+  updateArboardSize()
 }
 
 //=========================================
 // HELPERS
 //=========================================
 
-function addColorGroup (color,height,width){
+function addColorGroup (color){
   //Create layer group
   var hexString = "#" + palette[color].hexValue()
   var rgbaString = getColorStringWithAlpha(palette[color])
@@ -123,8 +119,6 @@ function addColorGroup (color,height,width){
 
   rectframe.setWidth(width)
   rectframe.setHeight(height)
-  // rectframe.setY(colorMargin)
-  // rectframe.setX(color*(width + colorMargin)+colorMargin)
 
   var calculatedY = (height + 83 + colorMargin) * Math.floor(color/colorsPerRow) + colorMargin
 
@@ -216,6 +210,24 @@ function getColorStringWithAlpha(color){
   return ("rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")")
 }
 
+function updateArboardSize(){
+
+  //Sets Artboard Frame
+  var frame = artboard_palette.frame()
+
+  var previousWidth = frame.width()
+  var previousX= frame.x()
+
+  if (palette.count() <= colorsPerRow){
+  	frame.setWidth( (width + colorMargin) * palette.count() + colorMargin)
+  } else {
+  	frame.setWidth( (width + colorMargin) * colorsPerRow + colorMargin)
+  }
+
+  frame.setHeight(colorMargin + (layergroup.frame().height() + colorMargin) * Math.ceil(palette.count()/colorsPerRow) )
+  frame.setX((previousX + previousWidth) - frame.width())
+}
+
 /*
 //Takes BG color and makes it to a contrasted readable color
 function contrastedColor(col) {
@@ -265,3 +277,4 @@ function contrastedColor(col) {
 
 }
 */
+
