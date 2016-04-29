@@ -29,15 +29,15 @@ var startColorPalette = function(context) {
 	//Gets array of artboards
 	artboards = doc.currentPage().artboards()
 
-
-  //Generates Artboard if doesn't exist
-  if ( !paletteExists() ) {
-    generateArtboard()
-  }
-
   //If there are colors.
 	if (colors.count() > 0) {
-    updateArtboard()
+
+ 	 //Generates Artboard if doesn't exist
+ 	 if ( !paletteExists() ) {
+ 	   generateArtboard()
+ 	 }
+ 	 
+		updateArtboard()
 	}
 
 }
