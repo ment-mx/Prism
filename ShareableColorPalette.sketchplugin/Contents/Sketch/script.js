@@ -34,9 +34,9 @@ var startColorPalette = function(context) {
 
  	 //Generates Artboard if doesn't exist
  	 if ( !paletteExists() ) {
- 	   generateArtboard()
+
+ 	  	generateArtboard()
  	 }
- 	 
 		updateArtboard()
 	}
 
@@ -93,59 +93,45 @@ function updateArtboard() {
 //=========================================
 
 function addColorGroup (color){
+
   //Create layer group
   var hexString = "#" + palette[color].hexValue()
   var rgbaString = getColorStringWithAlpha(palette[color])
 
   var namedColor = classifier.classify(hexString)
-  layergroup = [artboard_palette addLayerOfType: "group"]
+  layergroup = MSLayerGroup.new()
   [layergroup setName: namedColor + ": " + hexString ]
   layergroup.setIsLocked(true)
 
   //Adds shadow to the group
-  var groupshadow = layergroup.style().shadows().addNewStylePart()
+  var groupshadow = layergroup.style().addStylePartOfType(2)
   groupshadow.offsetX = 0
   groupshadow.offsetY = 3
   groupshadow.blurRadius = 6
   groupshadow.spread = 0
   groupshadow.color = MSColor.colorWithRed_green_blue_alpha(0,0,0.0,0.25)
 
-  //Create color rectangle
-  var colorbg = [layergroup addLayerOfType: "rectangle"]
-  [colorbg setName: "" + " " +hexString ]
-
   //Define size and position
-  var rectframe = colorbg.frame()
-
-  rectframe.setWidth(width)
-  rectframe.setHeight(height)
 
   var calculatedY = (height + 83 + colorMargin) * Math.floor(color/colorsPerRow) + colorMargin
 
-  rectframe.setY(calculatedY)
   var collapseRegression = colorsPerRow * Math.floor(color/colorsPerRow)
-  rectframe.setX((color - collapseRegression) * (width + colorMargin) +colorMargin)
+  var definedX = (color - collapseRegression) * (width + colorMargin) + colorMargin
+
+  //Create color rectangle path
+  var colorbgPath = MSRectangleShape.alloc().initWithFrame_(NSMakeRect(definedX, calculatedY, width, height))
+
+  //Create color rectangle layer
+  var colorbg = MSShapeGroup.shapeWithPath(colorbgPath)
+  [colorbg setName:  "#" + hexString ]
 
   //Add background color
-  var colorbgfill = colorbg.style().fills().addNewStylePart()
-  colorbgfill.color = MSColor.colorWithSVGString(hexString)
+  var colorbgfill = colorbg.style().addStylePartOfType(0)
+  colorbgfill.setColor(MSColor.colorWithSVGString(hexString))
 
   //Create data group
-  var datagroup = [layergroup addLayerOfType: "group"]
+  var datagroup = MSLayerGroup.new()
   [datagroup setName: hexString ]
-
-  //Text layers Background
-  var textbg = [datagroup addLayerOfType: "rectangle"]
-  [textbg setName: "Data Background " + (color+1)]
-
-  var textbgframe = textbg.frame()
-  textbgframe.setWidth(width)
-  textbgframe.setY([rectframe y] + [rectframe height])
-  textbgframe.setX([rectframe x])
-
-  //Add data background color
-  var textbgfill = textbg.style().fills().addNewStylePart()
-  textbgfill.color = MSColor.colorWithSVGString("#ffffff")
 
   //Named Color Text Layer
   var namedLayer = newTextLayer(datagroup, namedColor, colorbg, 11, 15, namedColor, 0, 16,"Helvetica-Bold","#000000")
@@ -158,18 +144,40 @@ function addColorGroup (color){
   var rgbframe = rgbLayer.frame()
 
   //Sets Text Background Height
-  textbgframe.setHeight(([rgbframe y]+[rgbframe height]) - ([rectframe y] + [rectframe height])+ 14)
+  var rectframe = colorbg.frame()
+
+  var dataHeight = ([rgbframe y]+[rgbframe height]) - ([rectframe y] + [rectframe height])+ 14
+  var dataY = [rectframe y] + [rectframe height]
+  var dataX = [rectframe x]
+
+    //Text layers Background
+  var textbgPath = MSRectangleShape.alloc().initWithFrame_(NSMakeRect(dataX, dataY, width, dataHeight))
+  
+  var textbg = MSShapeGroup.shapeWithPath(textbgPath)
+  [textbg setName: "Data Background " + (color+1)]
+
+  //Add data background color
+  var textbgfill = textbg.style().addStylePartOfType(0)
+  textbgfill.setColor(MSColor.colorWithSVGString("#ffffff"))
+
+
+  //Adds the layers inside the groups
+  datagroup.addLayers([textbg, hexLayer, rgbLayer])
+  layergroup.addLayers( [datagroup, namedLayer, colorbg])
 
   //Resizes the layer group to fit the background and the text layers
-  layergroup.resizeToFitChildrenWithOption(1)
-  datagroup.resizeToFitChildrenWithOption(1)
+  datagroup.resizeToFitChildrenWithOption(0)
+  layergroup.resizeToFitChildrenWithOption(0)
+
+  artboard_palette.addLayers([layergroup])
+
 }
 
 
 function newTextLayer(parent, name, aligner, margintop, marginleft, text, textalignment, fontsize, fontname, fontcolor){
 
   //Creates new layer & appends it to parent
-  var newlayer = [parent addLayerOfType: "text"]
+  var newlayer = MSTextLayer.alloc().init()
   [newlayer setName: name ]
 
   //Positions based on aligner
@@ -186,9 +194,6 @@ function newTextLayer(parent, name, aligner, margintop, marginleft, text, textal
   newlayer.setFontPostscriptName(fontname)
   newlayer.setTextColor(MSColor.colorWithSVGString(fontcolor))
   return newlayer
-
-  //Sets text color depending on background: NOW WORKS AS EXPECTED BITCHES...
-  //textlayer.setTextColor(MSColor.colorWithSVGString( contrastedColor(hexString) ))
 }
 
 function paletteExists(){
