@@ -38,7 +38,10 @@ var startColorPalette = function(context) {
  	  	generateArtboard()
  	 }
 		updateArtboard()
-	}
+
+	} else {
+    app.displayDialog_withTitle("Drag the colors you want to the Document Colors palette and then run the command [ctrl + cmd + c]" , "No colors to create Shareable Color Palette®")
+  }
 
 }
 
