@@ -1,12 +1,7 @@
 <h1>ShareableColorPalette</h1>
 A SketchApp plugin that creates an artboard with your "Document Colors Palette's" HEX and rgba values. You can either export a pdf to share or a SASS file with the color values. **(Works on Sketch 8.3.8+)** 
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="QBFHGZHWJNLEG">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1">
-</form>
+[![Donate with PayPal](https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/DonateButt.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QBFHGZHWJNLEG)
 
 <h2>Usage</h2>
 1. Install plugin
