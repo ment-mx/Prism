@@ -45,7 +45,7 @@
 
       // Request permission to write for App Store version of Sketch
       [fileString writeToFile:filePath atomically:true encoding:NSUTF8StringEncoding error:null];
-      context.document.showMessage("SASS palette saved to [" + filePath + "]")
+
 
     }
 
