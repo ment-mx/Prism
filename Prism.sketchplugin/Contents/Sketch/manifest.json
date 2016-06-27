@@ -10,24 +10,32 @@
   "commands" : [
     {
       "name" : "Generate Color Palette",
-      "script" : "Prism.js",
+      "script" : "Prism.cocoascript",
       "handler" : "generatePalette",
       "shortcut" : "cmd ctrl c",
       "identifier" : "generatePalette"
     },
     {
       "name": "Export All Colors...",
-      "script": "Prism.js",
-      "handler": "exportColors",
+      "script": "Prism.cocoascript",
+      "handler": "exportAll",
       "shortcut": "cmd ctrl e",
-      "identifier": "exportColors"
+      "identifier": "exportAll"
+    },
+    {
+      "script" : "Prism.cocoascript",
+      "handlers" : {
+        "actions" : {
+           "TextChanged.finish" : "colorNameChanged",
+           }
+          },
     }
   ],
   "menu" : {
     "title": "Prism",
     "items" : [
       "generatePalette",
-      "exportColors"
+      "exportAll"
     ],
   },
 

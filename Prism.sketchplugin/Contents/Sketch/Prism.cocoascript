@@ -1,0 +1,12 @@
+@import "libs/ColorClassifier.js";
+
+@import "build/ColorEncoder.js";
+@import "build/Cell.js";
+@import "build/Palette.js";
+@import "build/Template.js";
+
+@import "build/Main.js";
+
+/*
+
+*/
