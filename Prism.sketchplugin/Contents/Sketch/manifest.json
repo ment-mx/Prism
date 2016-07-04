@@ -1,0 +1,57 @@
+{
+  "name": "Prism",
+  "description": "Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.",
+  "author": "Lalo Mrtnz & Adrián Rubio",
+  "homepage": "https://github.com/LaloMrtnz/ShareableColorPalette",
+  "version": "1.0",
+  "identifier": "com.ment.sketch.prism",
+  "compatibleVersion": "3.8",
+  "bundleVersion": "1.0",
+  "commands" : [
+    {
+      "name" : "Generate Color Palette",
+      "script" : "Prism.cocoascript",
+      "handler" : "generatePalette",
+      "shortcut" : "cmd ctrl c",
+      "identifier" : "generatePalette"
+    },
+    {
+      "name": "Export All Colors...",
+      "script": "Prism.cocoascript",
+      "handler": "exportAll",
+      "shortcut": "cmd ctrl e",
+      "identifier": "exportAll"
+    },
+    {
+      "name": "Export Selected Colors...",
+      "script": "Prism.cocoascript",
+      "handler": "exportSelected",
+      "shortcut": "cmd ctrl s",
+      "identifier": "exportSelected"
+    },
+    {
+      "name": "Show Template File...",
+      "script": "Prism.cocoascript",
+      "handler": "openTemplate",
+      "identifier": "openTemplate"
+    },
+    {
+      "script" : "Prism.cocoascript",
+      "handlers" : {
+        "actions" : {
+           "TextChanged.finish" : "colorNameChanged",
+           }
+          },
+    }
+  ],
+  "menu" : {
+    "title": "Prism",
+    "items" : [
+      "generatePalette",
+      "exportAll",
+      "exportSelected",
+      "openTemplate"
+    ],
+  },
+
+}
