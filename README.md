@@ -4,7 +4,8 @@
 |  [Download][] | [Usage][] | [Customization][] | [Changelog][] |
 |---|---|---|---|---|---|
 
-_Formerly ShareableColorPalette_
+_(Formerly ShareableColorPalette)_
+
 Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 8.3.8+)_ 
 
 [![Donate with PayPal](https://dl.dropboxusercontent.com/u/85491591/ShareableColorPalette/DonateButt.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QBFHGZHWJNLEG)
@@ -16,11 +17,12 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 3. Run command **[cmd ctrl c]**
 4. Get your **Prism Palette** with your desired format.
 
+![How it works!] 
+(https://dl.dropboxusercontent.com/u/85491591/Prism/CreatePalette.gif)
+
 ![Example image] 
 (https://dl.dropboxusercontent.com/u/85491591/Prism/ClassicSample.png)
 
-![How it works!] 
-(https://dl.dropboxusercontent.com/u/85491591/Prism/CreatePalette.gif)
 
 <h4>Changing a Color Alias</h4>
 
