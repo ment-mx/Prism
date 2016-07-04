@@ -23,6 +23,19 @@
       "identifier": "exportAll"
     },
     {
+      "name": "Export Selected Colors...",
+      "script": "Prism.cocoascript",
+      "handler": "exportSelected",
+      "shortcut": "cmd ctrl s",
+      "identifier": "exportSelected"
+    },
+    {
+      "name": "Show Template File...",
+      "script": "Prism.cocoascript",
+      "handler": "openTemplate",
+      "identifier": "openTemplate"
+    },
+    {
       "script" : "Prism.cocoascript",
       "handlers" : {
         "actions" : {
@@ -35,7 +48,9 @@
     "title": "Prism",
     "items" : [
       "generatePalette",
-      "exportAll"
+      "exportAll",
+      "exportSelected",
+      "openTemplate"
     ],
   },
 

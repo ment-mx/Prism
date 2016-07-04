@@ -1,77 +1,93 @@
-#Main...
+###
+ Generate Palette
+
+ Called when the user wants to generate a palette from its Document Colors
+###
 generatePalette = (context) ->
   log "Generating..."
   palette = new Palette(context)
   palette.generate()
 
-colorNameChanged = (context) ->
-  log "Alias..."
+###
+ Color Name Changed
 
+ Called when the user makes a change in any text layer. Used to add or remove new alias for colors.
+###
+colorNameChanged = (context) ->
+  log "Color Name Changed..."
   textLayer = context.actionContext.layer
   artboard = textLayer.parentArtboard()
-  newText = context.actionContext.new
+  newText = context.actionContext.new # The new value for the changed text layer
+  pluginID = context.plugin.identifier() # Plugin ID for saving data
 
-  pluginID = context.plugin.identifier()
-
+  #Be sure that text layer has a colorValue and its parent artboard is in fact the Prism Palette.
   colorValue = context.command.valueForKey_onLayer_forPluginIdentifier( Cell::TEXT_LAYER_TAG , textLayer, pluginID )
-  isArtboard = context.command.valueForKey_onLayer_forPluginIdentifier( Palette::ARTBOARD_TAG , artboard, pluginID )
+  inPalette = context.command.valueForKey_onLayer_forPluginIdentifier( Palette::ARTBOARD_TAG , artboard, pluginID )
+  return unless colorValue && inPalette
 
-  return unless colorValue && isArtboard
-
-  finalName = if "#{newText}" != "-"
+  #If the new text is empty, remove the alias for that color value, otherwise save the alias
+  if "#{newText}".trim() != ""
     #Save alias
-    log "Saving alias: #{newText} for color: #{colorValue}."
-    log "---> #{artboard} or #{ pluginID}"
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID )
-    newText
   else
     #Remove Alias
-    log "Removing alias for color: #{colorValue}."
     context.command.setValue_forKey_onLayer_forPluginIdentifier(null, colorValue, artboard, pluginID )
-    colorClassifier = new ColorClassifier()
-    colorClassifier.classify(colorValue)
 
-  #Affect other layers in the palette
-  children = artboard.children()
-  for i in [0...children.count()]
-    layer = children[i]
-    if context.command.valueForKey_onLayer_forPluginIdentifier( Cell::CELL_LAYER_TAG , layer, pluginID ) == colorValue
-      layer.setName(finalName)
-    if context.command.valueForKey_onLayer_forPluginIdentifier( Cell::TEXT_LAYER_TAG , layer, pluginID ) == colorValue
-      layer.stringValue = finalName
+  #Load Palette and regenerate
+  palette = new Palette(context,textLayer)
+  palette.regenerate()
 
+###
+ Export All
 
-exportSelected = (context) ->
-  log "Exporting Colors..."
-  selectedLayers = context.document.selectedLayers
-  log selectedLayers
-  #for selection in selections
-
+ Called when the user wants to export all the colors in the palette (not in the Document Colors)
+###
 exportAll = (context) ->
-  log "exporting..."
+  log "Export All..."
   palette = new Palette(context)
-  allColors = palette.getColors()
-  log "-->+++++ #{allColors}"
-
-  colorEncoder = new ColorEncoder()
-  response = colorEncoder.displayEncodingSelectionDialog()
-
-  colorsString = colorEncoder.nsStringFromColors_withEncoding(allColors, response.encoding)
-  log "--> #{colorsString}"
-  switch response.code
+  colorDictionaries = palette.getColorsDictionaries()
+  colorFormatter = new ColorFormatter()
+  responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries)
+  #Confirmation messages ;)
+  context.document.hideMessage()
+  switch responseCode
     when 1000 # Save to file...
-      log "Saving..."
-      savePanel = NSSavePanel.savePanel();
-      savePanel.setNameFieldStringValue("colors.txt");
-      #savePanel.setAllowsOtherFileTypes(false);
-      savePanel.setExtensionHidden(false);
+      context.document.showMessage "Your colors were successfully saved!"
+    when 1001 #Export
+      context.document.showMessage "Copied to clipboard!"
+###
+ Export Selected
 
-      if savePanel.runModal()
-        filePath = savePanel.URL().path()
-        fileString = NSString.stringWithString( colorsString )
-        fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null)
-    when 1001 # Copy to clipboard
-      log "Copying..."
-      pasteboard = NSPasteboard.generalPasteboard()
-      pasteboard.declareTypes_owner( [ NSPasteboardTypeString], null )
-      pasteboard.setString_forType( colorsString, NSPasteboardTypeString )
+ Called when the user wants to export only the selected Cell Groups.
+###
+exportSelected = (context) ->
+  log "Export Selected..."
+  selectedLayers = context.selection
+
+  #Alert if no layers were selected
+  if selectedLayers.count() == 0
+    NSApplication.sharedApplication().displayDialog_withTitle("No color cells were selected for export!", "Nothing selected")
+    return
+
+  #Get color data from selected layers
+  palette = new Palette(context)
+  colorDictionaries = palette.getColorsDictionariesFromLayers(selectedLayers)
+  colorFormatter = new ColorFormatter()
+  responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries)
+  #Confirmation messages ;)
+  context.document.hideMessage()
+  switch responseCode
+    when 1000 # Save to file...
+      context.document.showMessage "Your colors were successfully saved!"
+    when 1001 #Export
+      context.document.showMessage "Copied to clipboard!"
+
+###
+ Open Template
+
+ Called when the users wants to open the template file that all the cells are generated from.
+###
+openTemplate = (context) ->
+  log "Open Template..."
+  template = new Template( context.plugin.url() )
+  template.openTemplateFile()
