@@ -14,6 +14,8 @@ _(Formerly **ShareableColorPalette**)_
 Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 8.3.8+)_ 
 
 ***
+
+
 <h2>Features</h2>
 * Beautiful color palette generation.
 * Automatic color naming.
@@ -22,7 +24,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 * Color renaming (Alias).
 * Rebuilt from the ground up using `Coffeescript` and love.
 
-***
+
 
 <h2>Usage</h2>
 1. Install plugin.
@@ -53,7 +55,6 @@ To change the color alias, just change the text on the *Name* layer. If you want
   <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
 </p>
 
-***
 <h2>Customization</h2>
 Under the Prism menu, there's an option called **Show Template File...** that opens the Template.sketch file located under the Prism.sketchplugin package, this file contains the all the layers that are used as templates and are later copied over to your palette. 
 
@@ -112,7 +113,7 @@ You can have as many text layers for formats as you want. Also, layers can be lo
 
 If you wanna dive deeper on this process, you should check out the `Cell.coffee` and `Template.coffee` files.
 
-***
+
 <h2>Contribute</h2>
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
 
@@ -123,23 +124,23 @@ You can run the compile.sh file by typing this in the terminal inside the Prism.
 ```
 This will compile your files as soon as they are saved, as long as the process is running. To stop the process just `Ctrl-C` out of it ;)
 
-***
+
 <h2>Change Log</h2>
 _Version 1.0_
 * ShareableColorPalatte turns into Prism 1.0!
 * Now made with [Coffeescript](http://coffeescript.org)
 
-***
+
 <h2>What's next</h2>
 * Gradients support
 * Better template selection
 
-***
+
 <h2>Credits</h2>
-- [@Adrxx](https://github.com/Adrxx) & [@L__A__L__O](https://github.com/L__A__L__O): **Creators**
+- [Adrxx](https://github.com/Adrxx) & [L__A__L__O](https://github.com/L__A__L__O): **Creators**
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset. 
 
-[Download]:https://github.com/LaloMrtnz/Prism/archive/master.zip
+[Download]:https://github.com/LaloMrtnz/Prism/archive/1.0.zip
 [Features]:https://github.com/LaloMrtnz/Prism#features
 [Usage]:https://github.com/LaloMrtnz/Prism#usage
 [Customization]:https://github.com/LaloMrtnz/Prism#customization
