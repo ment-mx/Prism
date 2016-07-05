@@ -4,6 +4,11 @@
 
 |  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | [Donate][] |
 |---|---|---|---|---|---|---|---|---|---|
+
+<p align="center">
+  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
+</p>
+
 _(Formerly **ShareableColorPalette**)_
 
 Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 8.3.8+)_ 
@@ -26,7 +31,6 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 4. Voilà!
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
   <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/CreatePalette.gif" style="width: 100%; max-width:800px;" />
 </p>
 
