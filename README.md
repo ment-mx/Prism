@@ -109,16 +109,6 @@ You can have as many text layers for formats as you want. Also, layers can be lo
 If you wanna dive deeper on this process, you should check out the `Cell.coffee` and `Template.coffee` files.
 
 ***
-<h2>Change Log</h2>
-* ShareableColorPalatte turns into Prism 1.0!
-* Now made with [Coffeescript](http://coffeescript.org)
-
-***
-<h2>What's next</h2>
-* Gradients support
-* Better template selection
-
-***
 <h2>Contribute</h2>
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
 
@@ -130,6 +120,17 @@ You can run the compile.sh file by typing this in the terminal inside the Prism.
 This will compile your files as soon as they are saved, as long as the process is running. To stop the process just `Ctrl-C` out of it ;)
 
 ***
+<h2>Change Log</h2>
+_Version 1.0_
+* ShareableColorPalatte turns into Prism 1.0!
+* Now made with [Coffeescript](http://coffeescript.org)
+
+***
+<h2>What's next</h2>
+* Gradients support
+* Better template selection
+
+***
 <h2>Credits</h2>
 - [@Adrxx](https://github.com/Adrxx) & [@L__A__L__O](https://github.com/L__A__L__O): **Creators**
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset. 
@@ -138,8 +139,8 @@ This will compile your files as soon as they are saved, as long as the process i
 [Features]:https://github.com/LaloMrtnz/Prism#features
 [Usage]:https://github.com/LaloMrtnz/Prism#usage
 [Customization]:https://github.com/LaloMrtnz/Prism#customization
-[Changelog]:https://github.com/LaloMrtnz/Prism#changelog
-[Next]:https://github.com/LaloMrtnz/Prism#next
+[Changelog]:https://github.com/LaloMrtnz/Prism#change-log
+[Next]:https://github.com/LaloMrtnz/Prism#whats-next
 [Contribute]:https://github.com/LaloMrtnz/Prism#contribute
 [Credits]:https://github.com/LaloMrtnz/Prism#credits
 [Donate]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QBFHGZHWJNLEG
