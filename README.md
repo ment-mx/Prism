@@ -18,7 +18,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 * Beautiful color palette generation.
 * Automatic color naming.
 * Fully customizable.
-* Export as code in a variety of formats (CSS, SASS, Swift, etc).
+* Export as code in a variety of formats (CSS, SASS variables, Swift, etc).
 * Color renaming (Alias).
 * Rebuilt from the ground up using `Coffeescript` and love.
 
