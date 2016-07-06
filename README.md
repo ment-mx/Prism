@@ -62,7 +62,7 @@ Under the Prism menu, there's an option called **Show Template File...** that op
 The template file is a normal sketch file that has multiple pages, each page with its own cell Template, you can add or remove all the pages you want to manage your own templates, to select the style you want just open the file and save it on the page your desired template is. Now just generate your palette to see the changes.
 
 <p align="center">
-  <img src=http://198.199.69.85/prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
   
 <h4>Editing Template</h4>
