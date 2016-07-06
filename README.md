@@ -11,7 +11,7 @@
 
 _(Formerly **ShareableColorPalette**)_
 
-Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 8.3.8+)_ 
+Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 3.8.3+)_ 
 
 ***
 
