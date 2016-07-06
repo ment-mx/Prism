@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/Logo.png" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/logo.png" style="width: 100%; max-width:800px;" />
 </p>
 
 |  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | [Donate][] |
 |---|---|---|---|---|---|---|---|---|---|
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
 </p>
 
 _(Formerly **ShareableColorPalette**)_
@@ -33,7 +33,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 4. Voilà!
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/CreatePalette.gif" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/CreatePalette.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h4>Changing a Color Alias</h4>
@@ -41,7 +41,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 To change the color alias, just change the text on the *Name* layer. If you want the default color name, just delete the text on that same layer. 
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/changealias.gif" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/changealias.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h4>Exporting Colors as Code</h4>
@@ -52,7 +52,7 @@ To change the color alias, just change the text on the *Name* layer. If you want
 4. Save your color code file or copy the colors to clipboard. 
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h2>Customization</h2>
@@ -62,10 +62,10 @@ Under the Prism menu, there's an option called **Show Template File...** that op
 The template file is a normal sketch file that has multiple pages, each page with its own cell Template, you can add or remove all the pages you want to manage your own templates, to select the style you want just open the file and save it on the page your desired template is. Now just generate your palette to see the changes.
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
+  <img src=http://198.199.69.85/prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
   
-<h4>Editing Template Template</h4>
+<h4>Editing Template</h4>
 Prism offers a lot of freedom to let you customize your own templates, however, in order for your template to play nicely with Prism you just have a few restrictions:
 * Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-arboard to specify the spacing between cells.
 * Your template **must** have a layer group named exactly "Cell", everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
@@ -93,6 +93,8 @@ Then implement it in the same file
     all these methods must be prefixed with "format_" and then the format ID specified in the FORMATS array
     The commented flag is used to add comments (like when we export colors)
     or removing them (like when we are populating the cell layers with color data)
+    
+    the color variable that is passed is a dictionary with all the information you need
   ###
   format_RGBA_CSS: (color, commented) ->
     alpha = if color.alpha < 1
@@ -108,7 +110,7 @@ Then implement it in the same file
 You can have as many text layers for formats as you want. Also, layers can be locked or invisible as long as they conform to this restrictions.
 
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/85491591/Prism/EditTemplate.gif" style="width: 100%; max-width:800px;" />
+  <img src="http://198.199.69.85/prism/EditTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 If you wanna dive deeper on this process, you should check out the `Cell.coffee` and `Template.coffee` files.
