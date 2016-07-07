@@ -4,7 +4,7 @@
 
 |  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | [Donate][] |
 |---|---|---|---|---|---|---|---|---|---|
-
+re
 <p align="center">
   <img src="http://198.199.69.85/prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
 </p>
@@ -75,7 +75,7 @@ Prism offers a lot of freedom to let you customize your own templates, however, 
 
 _ColorFormatter.coffee_ This is where the format is registered
 ```coffeescript
-  # This is were formats are registred, the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
+  # This is were formats are registered, the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
   FORMATS: [
     { id: "HEX", name: "HEX CSS", format: "colors.css" }
     { id: "RGBA_CSS", name: "RGBA CSS", format: "colors.css" }
