@@ -29,7 +29,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 <h2>Usage</h2>
 1. Install plugin.
 2. Add your colors to your *Document Colors*.
-3. Run command **[cmd ctrl c]**.
+3. Run command **[ctrl cmd c]**.
 4. Voilà!
 
 <p align="center">
@@ -47,7 +47,7 @@ To change the color alias, just change the text on the *Name* layer. If you want
 <h4>Exporting Colors as Code</h4>
 
 1. Select the colors you want to export *(optional)*
-2. Click Export Selected Colors **[cmd cmd s]** or Export All Colors **[cmd cmd e]**
+2. Click Export Selected Colors **[ctrl cmd s]** or Export All Colors **[ctrl cmd e]**
 3. Select the format to export. 
 4. Save your color code file or copy the colors to clipboard. 
 
@@ -94,7 +94,13 @@ Then implement it in the same file
     The commented flag is used to add comments (like when we export colors)
     or removing them (like when we are populating the cell layers with color data)
     
-    the color variable that is passed is a dictionary with all the information you need
+    the color variable that is passed is a dictionary with all the information you need:
+      name: the default name of the color or the alias if it exists
+      hex: color's hex value without the leading '#'
+      red: color's red value from 0 to 1
+      blue: color's blue value from 0 to 1
+      green: color's green value from 0 to 1
+      alpha: color's alpha value from 0 to 1
   ###
   format_RGBA_CSS: (color, commented) ->
     alpha = if color.alpha < 1
