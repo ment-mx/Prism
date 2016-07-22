@@ -142,7 +142,7 @@ This will compile your files as soon as they are saved, as long as the process i
 - [Adrxx](https://github.com/Adrxx) & [L__A__L__O](https://github.com/L__A__L__O): **Creators**
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset.
 
-[Download]:https://github.com/LaloMrtnz/Prism/archive/1.1.zip
+[Download]:https://github.com/LaloMrtnz/Prism/archive/1.0.1.zip
 [Features]:https://github.com/LaloMrtnz/Prism#features
 [Usage]:https://github.com/LaloMrtnz/Prism#usage
 [Customization]:https://github.com/LaloMrtnz/Prism#customization
