@@ -11,7 +11,7 @@
 
 _(Formerly **ShareableColorPalette**)_
 
-Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 3.8.3+)_ 
+Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch 39)_ 
 
 ***
 
@@ -38,7 +38,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 
 <h4>Changing a Color Alias</h4>
 
-To change the color alias, just change the text on the *Name* layer. If you want the default color name, just delete the text on that same layer. 
+To change the color alias, just change the text on the *Name* layer. If you want the default color name, just delete the text on that same layer.
 
 <p align="center">
   <img src="http://198.199.69.85/prism/changealias.gif" style="width: 100%; max-width:800px;" />
@@ -48,15 +48,15 @@ To change the color alias, just change the text on the *Name* layer. If you want
 
 1. Select the colors you want to export *(optional)*
 2. Click Export Selected Colors **[ctrl cmd s]** or Export All Colors **[ctrl cmd e]**
-3. Select the format to export. 
-4. Save your color code file or copy the colors to clipboard. 
+3. Select the format to export.
+4. Save your color code file or copy the colors to clipboard.
 
 <p align="center">
   <img src="http://198.199.69.85/prism/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h2>Customization</h2>
-Under the Prism menu, there's an option called **Show Template File...** that opens the Template.sketch file located under the Prism.sketchplugin package, this file contains the all the layers that are used as templates and are later copied over to your palette. 
+Under the Prism menu, there's an option called **Show Template File...** that opens the Template.sketch file located under the Prism.sketchplugin package, this file contains the all the layers that are used as templates and are later copied over to your palette.
 
 <h4>Changing Palette Template</h4>
 The template file is a normal sketch file that has multiple pages, each page with its own cell Template, you can add or remove all the pages you want to manage your own templates, to select the style you want just open the file and save it on the page your desired template is. Now just generate your palette to see the changes.
@@ -64,7 +64,7 @@ The template file is a normal sketch file that has multiple pages, each page wit
 <p align="center">
   <img src="http://198.199.69.85/prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
-  
+
 <h4>Editing Template</h4>
 Prism offers a lot of freedom to let you customize your own templates, however, in order for your template to play nicely with Prism you just have a few restrictions:
 * Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-arboard to specify the spacing between cells.
@@ -93,7 +93,7 @@ Then implement it in the same file
     all these methods must be prefixed with "format_" and then the format ID specified in the FORMATS array
     The commented flag is used to add comments (like when we export colors)
     or removing them (like when we are populating the cell layers with color data)
-    
+
     the color variable that is passed is a dictionary with all the information you need:
       name: the default name of the color or the alias if it exists
       hex: color's hex value without the leading '#'
@@ -140,9 +140,9 @@ This will compile your files as soon as they are saved, as long as the process i
 
 <h2>Credits</h2>
 - [Adrxx](https://github.com/Adrxx) & [L__A__L__O](https://github.com/L__A__L__O): **Creators**
-- Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset. 
+- Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset.
 
-[Download]:https://github.com/LaloMrtnz/Prism/archive/1.0.zip
+[Download]:https://github.com/LaloMrtnz/Prism/archive/1.1.zip
 [Features]:https://github.com/LaloMrtnz/Prism#features
 [Usage]:https://github.com/LaloMrtnz/Prism#usage
 [Customization]:https://github.com/LaloMrtnz/Prism#customization
@@ -151,4 +151,3 @@ This will compile your files as soon as they are saved, as long as the process i
 [Contribute]:https://github.com/LaloMrtnz/Prism#contribute
 [Credits]:https://github.com/LaloMrtnz/Prism#credits
 [Donate]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QBFHGZHWJNLEG
-

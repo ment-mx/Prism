@@ -2,10 +2,10 @@
   "name": "Prism",
   "description": "Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.",
   "author": "Lalo Mrtnz & Adrián Rubio",
-  "homepage": "https://github.com/LaloMrtnz/ShareableColorPalette",
-  "version": "1.0",
+  "homepage": "https://github.com/ment-mx/Prism",
+  "version": "1.0.1",
   "identifier": "com.ment.sketch.prism",
-  "compatibleVersion": "3.8",
+  "compatibleVersion": "39",
   "bundleVersion": "1.0",
   "commands" : [
     {
