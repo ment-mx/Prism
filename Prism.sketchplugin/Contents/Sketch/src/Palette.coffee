@@ -20,7 +20,7 @@ class Palette extends Base
         @artboard = layer
 
     if @context.document
-      @colors = @context.document.documentData().assets().primitiveColors().array()
+      @colors = @context.document.documentData().assets().colors()
 
   regenerate: ->
     array = @getColorsDictionaries().map (colorDictionary) ->

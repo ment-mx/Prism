@@ -32,7 +32,7 @@ Palette = (function(superClass) {
       }
     }
     if (this.context.document) {
-      this.colors = this.context.document.documentData().assets().primitiveColors().array();
+      this.colors = this.context.document.documentData().assets().colors();
     }
   }
 
