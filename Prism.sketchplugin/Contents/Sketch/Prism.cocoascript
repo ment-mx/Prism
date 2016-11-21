@@ -1,5 +1,6 @@
 @import "libs/ColorClassifier.js";
 
+@import "build/Helpers.js";
 @import "build/ColorFormatter.js";
 @import "build/Base.js";
 @import "build/Cell.js";

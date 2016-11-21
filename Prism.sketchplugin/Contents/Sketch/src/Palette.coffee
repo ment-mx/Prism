@@ -50,7 +50,7 @@ class Palette extends Base
       color = @colors[i]
       cell = new Cell(@context)
       #If there's an alias defined then use it, otherwise use the color classifier.
-      name = @aliasForColor(color) ? @colorClassifier.classify(color.hexValue())
+      name = @aliasForColor(color) ? @colorClassifier.classify(hexValue(color.RGBADictionary()))
       cell.setColor_withName( color, name )
       cell.setX((cell.width + @CELL_SPACING) * column + @CELL_SPACING)
       cell.setY((cell.height + @CELL_SPACING) * row + @CELL_SPACING)
@@ -86,4 +86,4 @@ class Palette extends Base
     return colors
 
   aliasForColor: (color) ->
-    @valueForKey_onLayer(color.hexValue(),@artboard)
+    @valueForKey_onLayer(hexValue(color.RGBADictionary()),@artboard)

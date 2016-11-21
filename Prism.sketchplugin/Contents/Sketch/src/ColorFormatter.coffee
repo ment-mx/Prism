@@ -13,7 +13,8 @@ class ColorFormatter
     { id: "SASS", name: "SASS variables", format: "_colors.scss" }
     { id: "UICOLOR_SWIFT", name: "UIColor (Swift)", format: "colors.swift" }
     { id: "UICOLOR_OBJC", name: "UIColor (Objective-C)", format: "colors.m" }
-    { id: "ANDROID", name: "Android ARGB Color", format: "colors.java" }
+    { id: "ANDROID", name: "Android ARGB (Java code)", format: "colors.java" }
+    { id: "ANDROID_XML", name: "Android ARGB (XML)", format: "colors.xml" }
   ]
 
   colorClassifier: new ColorClassifier()
@@ -88,7 +89,7 @@ class ColorFormatter
   @colorToDictionary: (color, name) ->
     dictionary =
       name: name
-      hex: color.hexValue()
+      hex: hexValue(color.RGBADictionary())
       red: color.red()
       blue: color.blue()
       green: color.green()
@@ -131,6 +132,12 @@ class ColorFormatter
       "#{formattedColor} // #{color.name}"
     else
       formattedColor
+
+  format_ANDROID_XML: (color, commented) ->
+    formattedColor = "" + helperHex(color.alpha * 255) + helperHex(color.red * 255) + helperHex(color.green * 255) + helperHex(color.blue * 255)
+    xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>"
+    xmlVariable
+
 
   format_SASS: (color, commented) ->
     formattedColor = '#' + color.hex
