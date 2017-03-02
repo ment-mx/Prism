@@ -146,7 +146,7 @@ This will compile your files as soon as they are saved, as long as the process i
 
 
 <h2>Credits</h2>
-- [Adrxx](https://github.com/Adrxx) & [L__A__L__O](https://github.com/L__A__L__O): **Creators**
+- [Lalo](https://github.com/LaloMrtnz) & [Adrxx](https://github.com/Adrxx): **Creators**
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset.
 
 [Download]:https://github.com/ment-mx/Prism/archive/master.zip
