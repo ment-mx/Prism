@@ -193,7 +193,7 @@ ColorFormatter = (function() {
   ColorFormatter.prototype.format_SASS = function(color, commented) {
     var formattedColor, sassVariableName;
     formattedColor = '#' + color.hex;
-    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-");
+    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "");
     return sassVariableName + ": " + formattedColor + ";";
   };
 

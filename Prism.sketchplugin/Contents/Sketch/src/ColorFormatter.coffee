@@ -141,7 +141,7 @@ class ColorFormatter
 
   format_SASS: (color, commented) ->
     formattedColor = '#' + color.hex
-    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-")
+    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "")
     "#{sassVariableName}: #{formattedColor};"
 
   format_UICOLOR_SWIFT: (color, commented) ->
