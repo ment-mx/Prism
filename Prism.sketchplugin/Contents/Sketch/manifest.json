@@ -5,6 +5,7 @@
   "homepage": "https://github.com/ment-mx/Prism",
   "version": "1.0.2",
   "identifier": "com.ment.sketch.prism",
+  "appcast": "",
   "compatibleVersion": "41",
   "bundleVersion": "1.0",
   "commands" : [
