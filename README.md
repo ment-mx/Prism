@@ -19,10 +19,11 @@ If you're using Sketch 39 or 40, look for the 1.0.1 release.
 
 
 
-***
+******
 
 
 <h2>Features</h2>
+
 * Beautiful color palette generation.
 * Automatic color naming.
 * Fully customizable.
@@ -33,6 +34,7 @@ If you're using Sketch 39 or 40, look for the 1.0.1 release.
 
 
 <h2>Usage</h2>
+
 1. Install plugin.
 2. Add your colors to your *Document Colors*.
 3. Run command **[ctrl cmd c]**.
@@ -72,6 +74,7 @@ The template file is a normal sketch file that has multiple pages, each page wit
 </p>
 
 <h4>Editing Template</h4>
+
 Prism offers a lot of freedom to let you customize your own templates, however, in order for your template to play nicely with Prism you just have a few restrictions:
 * Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-arboard to specify the spacing between cells.
 * Your template **must** have a layer group named exactly "Cell", everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
@@ -140,11 +143,13 @@ This will compile your files as soon as they are saved, as long as the process i
 
 
 <h2>What's next</h2>
+
 * Gradients support
 * Better template selection
 
 
 <h2>Credits</h2>
+
 - [Lalo](https://github.com/LaloMrtnz) & [Adrxx](https://github.com/Adrxx): **Creators**
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset.
 
