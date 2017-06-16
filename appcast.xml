@@ -16,5 +16,16 @@
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.2.zip" sparkle:version="1.0.2" />
       </item>
+      <item>
+        <title>Version 1.0.3</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Added support for Sketch 45 plugin update mechanism.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/ment-mx/Prism/archive/v.1.0.3.zip" sparkle:version="1.0.3" />
+      </item>
   </channel>
 </rss>
