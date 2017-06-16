@@ -3,7 +3,7 @@
   "description": "Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.",
   "author": "Lalo Mrtnz & Adrián Rubio",
   "homepage": "https://github.com/ment-mx/Prism",
-  "version": "1.0.4",
+  "version": "1.0.3",
   "identifier": "com.ment.sketch.prism",
   "appcast": "https://raw.githubusercontent.com/ment-mx/Prism/master/appcast.xml",
   "compatibleVersion": "41",
