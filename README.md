@@ -12,8 +12,7 @@ _(Formerly **ShareableColorPalette**)_
 
 Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch **41**)_ 
 
-**IMPORTANT! Version 1.0.2 Works only on versions of Sketch 41 and higher**
-If you're using Sketch 39 or 40, look for the 1.0.1 release.
+**Important: Make sure to download version 1.0.3 to use Sketch 45 plugin auto updates.** 😎
 
 
 
