@@ -86,4 +86,4 @@ class Palette extends Base
     return colors
 
   aliasForColor: (color) ->
-    @valueForKey_onLayer(hexValue(color.RGBADictionary()),@artboard)
+    @valueForKey_onLayer(color.immutableModelObject().hexValue(),@artboard)

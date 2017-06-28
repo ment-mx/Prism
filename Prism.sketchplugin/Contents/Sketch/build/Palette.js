@@ -108,7 +108,7 @@ Palette = (function(superClass) {
   };
 
   Palette.prototype.aliasForColor = function(color) {
-    return this.valueForKey_onLayer(hexValue(color.RGBADictionary()), this.artboard);
+    return this.valueForKey_onLayer(color.immutableModelObject().hexValue(), this.artboard);
   };
 
   return Palette;
