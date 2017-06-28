@@ -4,6 +4,3 @@ helperHex = (val) ->
     "0#{hexString}"
   else
     hexString
-
-hexValue = (dictionary) ->
-  return "" + helperHex(dictionary.r * 255) + helperHex(dictionary.g * 255) + helperHex(dictionary.b * 255)

@@ -89,7 +89,7 @@ class ColorFormatter
   @colorToDictionary: (color, name) ->
     dictionary =
       name: name
-      hex: hexValue(color.RGBADictionary())
+      hex: color.immutableModelObject().hexValue() 
       red: color.red()
       blue: color.blue()
       green: color.green()
@@ -134,7 +134,7 @@ class ColorFormatter
       formattedColor
 
   format_ANDROID_XML: (color, commented) ->
-    formattedColor = "" + helperHex(color.alpha * 255) + helperHex(color.red * 255) + helperHex(color.green * 255) + helperHex(color.blue * 255)
+    formattedColor = "" + helperHex(color.alpha * 255) + color.hex
     xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>"
     xmlVariable
 
