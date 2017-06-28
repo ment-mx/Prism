@@ -36,7 +36,7 @@
             </ul>
           ]]>
         </description>
-        <enclosure url="https://github.com/ment-mx/Prism/archive/master.zip" sparkle:version="1.0.4" />
+        <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.4.zip" sparkle:version="1.0.4" />
       </item>
   </channel>
 </rss>
