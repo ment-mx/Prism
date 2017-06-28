@@ -38,5 +38,16 @@
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.4.zip" sparkle:version="1.0.4" />
       </item>
+      <item>
+        <title>Version 1.0.5</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Fixes bug with palette rendering and color hex value exports.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.5.zip" sparkle:version="1.0.5" />
+      </item>
   </channel>
 </rss>
