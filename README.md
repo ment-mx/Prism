@@ -2,7 +2,7 @@
   <img src="http://www.ment.com.mx/prism/logo.png" style="width: 100%; max-width:800px;" />
 </p>
 
-|  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | [Donate][] |
+|  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | 
 
 <p align="center">
   <img src="http://www.ment.com.mx/prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
@@ -160,4 +160,3 @@ This will compile your files as soon as they are saved, as long as the process i
 [Next]:https://github.com/LaloMrtnz/Prism#whats-next
 [Contribute]:https://github.com/LaloMrtnz/Prism#contribute
 [Credits]:https://github.com/LaloMrtnz/Prism#credits
-[Donate]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QBFHGZHWJNLEG
