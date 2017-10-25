@@ -75,7 +75,7 @@ The template file is a normal sketch file that has multiple pages, each page wit
 <h4>Editing Template</h4>
 
 Prism offers a lot of freedom to let you customize your own templates, however, in order for your template to play nicely with Prism you just have a few restrictions:
-* Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-arboard to specify the spacing between cells.
+* Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-artboard to specify the spacing between cells.
 * Your template **must** have a layer group named exactly "Cell", everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
 * Inside the "Cell" group there must be a layer named exactly "Color", it must have at least one solid Fill and this fill must be on the bottom of all the other fills, this layer is the one that Prism uses to display the real color.
 * Inside the "Cell" group there must be a **text** layer named exactly "Name" (lol), this is the layer that Prism uses to display the automatic name and can be edited to add or remove aliases.
