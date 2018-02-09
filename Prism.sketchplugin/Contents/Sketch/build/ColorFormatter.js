@@ -6,45 +6,25 @@
   it also has the logic to display the color formatter dialog and some class methods to transform a MSColor
   to a color Dictionary that can be saved in a layer
  */
-var ColorFormatter,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+var AndroidJavaFormatter, AndroidXMLFormatter, ColorFormatter, FormatterBase, HexFormatter, RGBACSSFormatter, SASSFormatter, UIColorObjCFormatter, UIColorSwiftFormatter,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
 ColorFormatter = (function() {
-  function ColorFormatter() {}
-
-  ColorFormatter.prototype.FORMATS = [
-    {
-      id: "HEX",
-      name: "HEX CSS",
-      format: "colors.css"
-    }, {
-      id: "RGBA_CSS",
-      name: "RGBA CSS",
-      format: "colors.css"
-    }, {
-      id: "SASS",
-      name: "SASS variables",
-      format: "_colors.scss"
-    }, {
-      id: "UICOLOR_SWIFT",
-      name: "UIColor (Swift)",
-      format: "colors.swift"
-    }, {
-      id: "UICOLOR_OBJC",
-      name: "UIColor (Objective-C)",
-      format: "colors.m"
-    }, {
-      id: "ANDROID",
-      name: "Android ARGB (Java code)",
-      format: "colors.java"
-    }, {
-      id: "ANDROID_XML",
-      name: "Android ARGB (XML)",
-      format: "colors.xml"
-    }
-  ];
+  ColorFormatter.prototype.FORMATS = [];
 
   ColorFormatter.prototype.colorClassifier = new ColorClassifier();
+
+  function ColorFormatter() {
+    this.FORMATS.push(new HexFormatter());
+    this.FORMATS.push(new RGBACSSFormatter());
+    this.FORMATS.push(new SASSFormatter());
+    this.FORMATS.push(new UIColorSwiftFormatter());
+    this.FORMATS.push(new UIColorObjCFormatter());
+    this.FORMATS.push(new AndroidJavaFormatter());
+    this.FORMATS.push(new AndroidXMLFormatter());
+  }
 
 
   /*
@@ -53,9 +33,12 @@ ColorFormatter = (function() {
    */
 
   ColorFormatter.prototype.showDialogWithColorDictionaries = function(colorDictionaries) {
-    var accessory, alert, allColorsString, colorDictionary, filePath, fileString, format, i, len, lines, names, pasteboard, responseCode, savePanel, selection;
+    var accessory, alert, allColorsString, copyButton, formatObj, names, pasteboard, responseCode, savePanel, selection, types;
     names = this.FORMATS.map(function(enc) {
-      return enc.name;
+      return enc.name();
+    });
+    types = this.FORMATS.map(function(enc) {
+      return enc.type();
     });
     accessory = NSPopUpButton.alloc().initWithFrame_pullsDown(NSMakeRect(0, 0, 400, 25), false);
     accessory.addItemsWithTitles(names);
@@ -64,38 +47,64 @@ ColorFormatter = (function() {
     alert.setMessageText("Export colors");
     alert.setInformativeText("Select the color format:");
     alert.addButtonWithTitle('Save to file...');
-    alert.addButtonWithTitle('Copy to clipboard');
+    copyButton = alert.addButtonWithTitle('Copy to clipboard');
     alert.addButtonWithTitle('Cancel');
     alert.setAccessoryView(accessory);
+    accessory.setCOSJSTargetFunction(function(sender) {
+      var selection, type;
+      selection = accessory.indexOfSelectedItem();
+      type = types[selection];
+      switch (type) {
+        case "text":
+          return copyButton.setEnabled(true);
+        default:
+          return copyButton.setEnabled(false);
+      }
+    });
     responseCode = alert.runModal();
     selection = accessory.indexOfSelectedItem();
-    lines = [];
-    for (i = 0, len = colorDictionaries.length; i < len; i++) {
-      colorDictionary = colorDictionaries[i];
-      format = this.FORMATS[selection].id;
-      lines.push(this.formatColorDictionary_withFormat_commented(colorDictionary, format, true));
-    }
-    allColorsString = lines.join("\n");
+    formatObj = this.FORMATS[selection];
     switch (responseCode) {
       case 1000:
         log("Saving...");
-        savePanel = NSSavePanel.savePanel();
-        savePanel.setNameFieldStringValue(this.FORMATS[selection].format);
-        savePanel.setAllowsOtherFileTypes(true);
-        savePanel.setExtensionHidden(false);
-        if (savePanel.runModal()) {
-          filePath = savePanel.URL().path();
-          fileString = NSString.stringWithString(allColorsString);
-          fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null);
+        switch (formatObj.type()) {
+          case "text":
+            savePanel = NSSavePanel.savePanel();
+            savePanel.setNameFieldStringValue(formatObj.format());
+            savePanel.setAllowsOtherFileTypes(true);
+            savePanel.setExtensionHidden(false);
+            if (savePanel.runModal()) {
+              formatObj.exportAsFile(colorDictionaries, savePanel.URL());
+            }
+            break;
+          default:
+            log("Not implemented CLR");
         }
         break;
       case 1001:
         log("Copying...");
+        allColorsString = formatObj.exportAsString(colorDictionaries);
         pasteboard = NSPasteboard.generalPasteboard();
         pasteboard.declareTypes_owner([NSPasteboardTypeString], null);
         pasteboard.setString_forType(allColorsString, NSPasteboardTypeString);
     }
     return responseCode;
+  };
+
+  ColorFormatter.prototype.formatTextFromColorDictionary = function(format, colorDictionaries) {
+    var allColorsString, colorDictionary, i, len, lines;
+    lines = [];
+    for (i = 0, len = colorDictionaries.length; i < len; i++) {
+      colorDictionary = colorDictionaries[i];
+      lines.push(this.formatColorDictionary_withFormat_commented(colorDictionary, format, true));
+    }
+    return allColorsString = lines.join("\n");
+  };
+
+  ColorFormatter.prototype.writeStringToFile = function(filePath, string) {
+    var fileString;
+    fileString = NSString.stringWithString(string);
+    return fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null);
   };
 
 
@@ -105,13 +114,13 @@ ColorFormatter = (function() {
     or removing them (like when we are populating the cell layers with color data)
    */
 
-  ColorFormatter.prototype.formatColorDictionary_withFormat_commented = function(colorDictionary, format, commented) {
+  ColorFormatter.prototype.formatColorDictionary_withFormat_commented = function(colorDictionary, format, commented, url) {
     var formatIDs;
     formatIDs = this.FORMATS.map(function(enc) {
       return enc.id;
     });
     if (indexOf.call(formatIDs, format) >= 0) {
-      return eval("this.format_" + format + "(colorDictionary, commented);");
+      return eval("this.format_" + format + "(colorDictionary, commented, url);");
     } else {
       return log("'" + format + "' format not implemented.");
     }
@@ -144,15 +153,86 @@ ColorFormatter = (function() {
     return color = MSColor.colorWithRed_green_blue_alpha(dictionary.red, dictionary.green, dictionary.blue, dictionary.alpha);
   };
 
+  return ColorFormatter;
 
-  /*
-  **************** FORMATS ****************
-    HERE is when you have to do the implementation of the new format you want to add.
-  
-    all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
-   */
+})();
 
-  ColorFormatter.prototype.format_HEX = function(color, commented) {
+
+/*
+**************** FORMATS ****************
+  HERE is when you have to do the implementation of the new format you want to add.
+
+  all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
+ */
+
+FormatterBase = (function() {
+  function FormatterBase() {}
+
+  FormatterBase.prototype.identifier = function() {};
+
+  FormatterBase.prototype.name = function() {};
+
+  FormatterBase.prototype.format = function() {};
+
+  FormatterBase.prototype.type = function() {};
+
+  FormatterBase.prototype.formatText = function(color, commented) {};
+
+  FormatterBase.prototype.formatTextFromColorDictionaries = function(colorDictionaries) {
+    var allColorsString, colorDictionary, i, len, lines;
+    lines = [];
+    for (i = 0, len = colorDictionaries.length; i < len; i++) {
+      colorDictionary = colorDictionaries[i];
+      lines.push(this.formatText(colorDictionary, true));
+    }
+    return allColorsString = lines.join("\n");
+  };
+
+  FormatterBase.prototype.writeStringToFile = function(filePath, string) {
+    var fileString;
+    fileString = NSString.stringWithString(string);
+    return fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null);
+  };
+
+  FormatterBase.prototype.exportAsFile = function(colorDictionaries, url) {
+    var text;
+    text = this.formatTextFromColorDictionaries(colorDictionaries);
+    return this.writeStringToFile(url.path(), text);
+  };
+
+  FormatterBase.prototype.exportAsString = function(colorDictionaries) {
+    var text;
+    return text = this.formatTextFromColorDictionaries(colorDictionaries);
+  };
+
+  return FormatterBase;
+
+})();
+
+HexFormatter = (function(superClass) {
+  extend(HexFormatter, superClass);
+
+  function HexFormatter() {
+    return HexFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  HexFormatter.prototype.identifier = function() {
+    return "HEX";
+  };
+
+  HexFormatter.prototype.name = function() {
+    return "HEX CSS";
+  };
+
+  HexFormatter.prototype.format = function() {
+    return "colors.css";
+  };
+
+  HexFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  HexFormatter.prototype.formatText = function(color, commented) {
     var formattedColor;
     formattedColor = '#' + color.hex;
     if (commented) {
@@ -162,7 +242,34 @@ ColorFormatter = (function() {
     }
   };
 
-  ColorFormatter.prototype.format_RGBA_CSS = function(color, commented) {
+  return HexFormatter;
+
+})(FormatterBase);
+
+RGBACSSFormatter = (function(superClass) {
+  extend(RGBACSSFormatter, superClass);
+
+  function RGBACSSFormatter() {
+    return RGBACSSFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  RGBACSSFormatter.prototype.identifier = function() {
+    return "RGBA_CSS";
+  };
+
+  RGBACSSFormatter.prototype.name = function() {
+    return "RGBA CSS";
+  };
+
+  RGBACSSFormatter.prototype.format = function() {
+    return "colors.css";
+  };
+
+  RGBACSSFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  RGBACSSFormatter.prototype.formatText = function(color, commented) {
     var alpha, formattedColor;
     alpha = color.alpha < 1 ? color.alpha.toFixed(2) : color.alpha;
     formattedColor = "rgba(" + (Math.round(color.red * 255)) + "," + (Math.round(color.green * 255)) + "," + (Math.round(color.blue * 255)) + "," + alpha + ");";
@@ -173,31 +280,68 @@ ColorFormatter = (function() {
     }
   };
 
-  ColorFormatter.prototype.format_ANDROID = function(color, commented) {
-    var formattedColor;
-    formattedColor = "Color.argb(" + (Math.round(color.alpha * 255)) + "," + (Math.round(color.red * 255)) + "," + (Math.round(color.green * 255)) + "," + (Math.round(color.blue * 255)) + ");";
-    if (commented) {
-      return formattedColor + " // " + color.name;
-    } else {
-      return formattedColor;
-    }
+  return RGBACSSFormatter;
+
+})(FormatterBase);
+
+SASSFormatter = (function(superClass) {
+  extend(SASSFormatter, superClass);
+
+  function SASSFormatter() {
+    return SASSFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  SASSFormatter.prototype.identifier = function() {
+    return "SASS";
   };
 
-  ColorFormatter.prototype.format_ANDROID_XML = function(color, commented) {
-    var formattedColor, xmlVariable;
-    formattedColor = "" + helperHex(color.alpha * 255) + color.hex;
-    xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>";
-    return xmlVariable;
+  SASSFormatter.prototype.name = function() {
+    return "SASS variables";
   };
 
-  ColorFormatter.prototype.format_SASS = function(color, commented) {
+  SASSFormatter.prototype.format = function() {
+    return "_colors.scss";
+  };
+
+  SASSFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  SASSFormatter.prototype.formatText = function(color, commented) {
     var formattedColor, sassVariableName;
     formattedColor = '#' + color.hex;
     sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "");
     return sassVariableName + ": " + formattedColor + ";";
   };
 
-  ColorFormatter.prototype.format_UICOLOR_SWIFT = function(color, commented) {
+  return SASSFormatter;
+
+})(FormatterBase);
+
+UIColorSwiftFormatter = (function(superClass) {
+  extend(UIColorSwiftFormatter, superClass);
+
+  function UIColorSwiftFormatter() {
+    return UIColorSwiftFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  UIColorSwiftFormatter.prototype.identifier = function() {
+    return "UICOLOR_SWIFT";
+  };
+
+  UIColorSwiftFormatter.prototype.name = function() {
+    return "UIColor (Swift)";
+  };
+
+  UIColorSwiftFormatter.prototype.format = function() {
+    return "colors.m";
+  };
+
+  UIColorSwiftFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  UIColorSwiftFormatter.prototype.formatText = function(color, commented) {
     var alpha, blue, formattedColor, green, red;
     red = Math.round(color.red * 100) / 100;
     green = Math.round(color.green * 100) / 100;
@@ -211,7 +355,34 @@ ColorFormatter = (function() {
     }
   };
 
-  ColorFormatter.prototype.format_UICOLOR_OBJC = function(color, commented) {
+  return UIColorSwiftFormatter;
+
+})(FormatterBase);
+
+UIColorObjCFormatter = (function(superClass) {
+  extend(UIColorObjCFormatter, superClass);
+
+  function UIColorObjCFormatter() {
+    return UIColorObjCFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  UIColorObjCFormatter.prototype.identifier = function() {
+    return "UICOLOR_OBJC";
+  };
+
+  UIColorObjCFormatter.prototype.name = function() {
+    return "UIColor (Objective-C)";
+  };
+
+  UIColorObjCFormatter.prototype.format = function() {
+    return "colors.m";
+  };
+
+  UIColorObjCFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  UIColorObjCFormatter.prototype.formatText = function(color, commented) {
     var alpha, blue, formattedColor, green, red;
     red = Math.round(color.red * 100) / 100;
     green = Math.round(color.green * 100) / 100;
@@ -225,6 +396,77 @@ ColorFormatter = (function() {
     }
   };
 
-  return ColorFormatter;
+  return UIColorObjCFormatter;
 
-})();
+})(FormatterBase);
+
+AndroidJavaFormatter = (function(superClass) {
+  extend(AndroidJavaFormatter, superClass);
+
+  function AndroidJavaFormatter() {
+    return AndroidJavaFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  AndroidJavaFormatter.prototype.identifier = function() {
+    return "ANDROID";
+  };
+
+  AndroidJavaFormatter.prototype.name = function() {
+    return "Android ARGB (Java code)";
+  };
+
+  AndroidJavaFormatter.prototype.format = function() {
+    return "colors.java";
+  };
+
+  AndroidJavaFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  AndroidJavaFormatter.prototype.formatText = function(color, commented) {
+    var formattedColor;
+    formattedColor = "Color.argb(" + (Math.round(color.alpha * 255)) + "," + (Math.round(color.red * 255)) + "," + (Math.round(color.green * 255)) + "," + (Math.round(color.blue * 255)) + ");";
+    if (commented) {
+      return formattedColor + " // " + color.name;
+    } else {
+      return formattedColor;
+    }
+  };
+
+  return AndroidJavaFormatter;
+
+})(FormatterBase);
+
+AndroidXMLFormatter = (function(superClass) {
+  extend(AndroidXMLFormatter, superClass);
+
+  function AndroidXMLFormatter() {
+    return AndroidXMLFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  AndroidXMLFormatter.prototype.identifier = function() {
+    return "ANDROID_XML";
+  };
+
+  AndroidXMLFormatter.prototype.name = function() {
+    return "Android ARGB (XML)";
+  };
+
+  AndroidXMLFormatter.prototype.format = function() {
+    return "colors.xml";
+  };
+
+  AndroidXMLFormatter.prototype.type = function() {
+    return "text";
+  };
+
+  AndroidXMLFormatter.prototype.formatText = function(color, commented) {
+    var formattedColor, xmlVariable;
+    formattedColor = "" + helperHex(color.alpha * 255) + color.hex;
+    xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>";
+    return xmlVariable;
+  };
+
+  return AndroidXMLFormatter;
+
+})(FormatterBase);
