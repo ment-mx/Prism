@@ -56,7 +56,6 @@ exportAll = function(context) {
   colorDictionaries = palette.getColorsDictionaries();
   colorFormatter = new ColorFormatter();
   responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries);
-  context.document.hideMessage();
   switch (responseCode) {
     case 1000:
       return context.document.showMessage("Your colors were successfully saved!");
@@ -84,7 +83,6 @@ exportSelected = function(context) {
   colorDictionaries = palette.getColorsDictionariesFromLayers(selectedLayers);
   colorFormatter = new ColorFormatter();
   responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries);
-  context.document.hideMessage();
   switch (responseCode) {
     case 1000:
       return context.document.showMessage("Your colors were successfully saved!");
