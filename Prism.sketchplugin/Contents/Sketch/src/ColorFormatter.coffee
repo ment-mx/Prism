@@ -12,6 +12,13 @@ class ColorFormatter
   colorClassifier: new ColorClassifier()
 
   constructor: () ->
+    ###
+    **************** FORMATS ****************
+      HERE is when you have to do the implementation of the new format you want to add.
+
+      all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
+    ###
+
     @FORMATS.push new HexFormatter()
     @FORMATS.push new RGBACSSFormatter()
     @FORMATS.push new SASSFormatter()
@@ -127,49 +134,92 @@ class ColorFormatter
 ###
 **************** FORMATS ****************
   HERE is when you have to do the implementation of the new format you want to add.
-
-  all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
 ###
 
+###
+ FormatterBase
 
+ Base class for each type of formatters. Template Pattern.
+###
 class FormatterBase
   EXPORT_TYPE_FILE: "file"
   EXPORT_TYPE_FILES: "files"
 
-  identifier: ->
+  ###
+   name
 
+   Uses format name on modal panel. Override this at Subclass.
+  ###
   name: ->
 
+  ###
+   format
+
+   Uses default file name when its saved. Override this at Subclass.
+  ###
   format: ->
 
+  ###
+   type
+
+   `EXPORT_TYPE_FILE` or `EXPORT_TYPE_FILES`. Override this at Subclass.
+  ###
   type: ->
     @constructor.EXPORT_TYPE_FILE
 
+  ###
+   supportClipboard
+
+   If format supports clipboard then returns `true`.
+  ###
   supportClipboard: ->
     true
 
+  ###
+   formatText
+
+   Converts a Color Dictionary to String. Override this at Subclass.
+  ###
   formatText: (color, commented) ->
 
+  ###
+   formatTextFromColorDictionaries
+
+   Converts Color Dictionaries to String. Override this at Subclass if needs.
+  ###
   formatTextFromColorDictionaries: (colorDictionaries) ->
     lines = []
     for colorDictionary in colorDictionaries
       lines.push @formatText(colorDictionary,true)
     allColorsString = lines.join("\n")
 
+  ###
+   writeStringToFile
+
+   Writes String type format as file. Override this at Subclass if needs.
+  ###
   writeStringToFile: (filePath, string) ->
     fileString = NSString.stringWithString( string )
     fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null)
 
+  ###
+   exportAsFile
+
+   Writes format as file. Override this at Subclass if needs.
+  ###
   exportAsFile: (colorDictionaries, url) ->
-    text = @formatTextFromColorDictionaries(colorDictionaries)
+    text = @exportAsString(colorDictionaries)
     @writeStringToFile(url.path(), text)
 
+  ###
+   exportAsString
+
+   Converts Color Dictionaries to String. Override this at Subclass if needs.
+  ###
   exportAsString: (colorDictionaries) ->
     text = @formatTextFromColorDictionaries(colorDictionaries)
 
 class HexFormatter extends FormatterBase
-  identifier: ->
-    "HEX"
   name: ->
     "HEX CSS"
   format: ->
@@ -183,8 +233,6 @@ class HexFormatter extends FormatterBase
       formattedColor
 
 class RGBACSSFormatter extends FormatterBase
-  identifier: ->
-    "RGBA_CSS"
   name: ->
     "RGBA CSS"
   format: ->
@@ -202,8 +250,7 @@ class RGBACSSFormatter extends FormatterBase
       formattedColor
 
 class SASSFormatter extends FormatterBase
-  identifier: ->
-    "SASS"
+
   name: ->
     "SASS variables"
   format: ->
@@ -215,8 +262,7 @@ class SASSFormatter extends FormatterBase
     "#{sassVariableName}: #{formattedColor};"
 
 class UIColorSwiftFormatter extends FormatterBase
-  identifier: ->
-    "UICOLOR_SWIFT"
+
   name: ->
     "UIColor (Swift)"
   format: ->
@@ -234,8 +280,7 @@ class UIColorSwiftFormatter extends FormatterBase
       formattedColor
 
 class UIColorObjCFormatter extends FormatterBase
-  identifier: ->
-    "UICOLOR_OBJC"
+
   name: ->
     "UIColor (Objective-C)"
   format: ->
@@ -253,8 +298,7 @@ class UIColorObjCFormatter extends FormatterBase
       formattedColor
 
 class AndroidJavaFormatter extends FormatterBase
-  identifier: ->
-    "ANDROID"
+
   name: ->
     "Android ARGB (Java code)"
   format: ->
@@ -268,8 +312,7 @@ class AndroidJavaFormatter extends FormatterBase
       formattedColor
 
 class AndroidXMLFormatter extends FormatterBase
-  identifier: ->
-    "ANDROID_XML"
+
   name: ->
     "Android ARGB (XML)"
   format: ->
@@ -282,8 +325,7 @@ class AndroidXMLFormatter extends FormatterBase
 
 class CLRFormatter extends FormatterBase
   # https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/DrawColor/Concepts/AboutColorLists.html
-  identifier: ->
-    "CLR"
+
   name: ->
     "CLR (Color Lists)"
   format: ->

@@ -17,6 +17,13 @@ ColorFormatter = (function() {
   ColorFormatter.prototype.colorClassifier = new ColorClassifier();
 
   function ColorFormatter() {
+
+    /*
+    **************** FORMATS ****************
+      HERE is when you have to do the implementation of the new format you want to add.
+    
+      all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
+     */
     this.FORMATS.push(new HexFormatter());
     this.FORMATS.push(new RGBACSSFormatter());
     this.FORMATS.push(new SASSFormatter());
@@ -159,8 +166,13 @@ ColorFormatter = (function() {
 /*
 **************** FORMATS ****************
   HERE is when you have to do the implementation of the new format you want to add.
+ */
 
-  all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
+
+/*
+ FormatterBase
+
+ Base class for each type of formatters. Template Pattern.
  */
 
 FormatterBase = (function() {
@@ -170,21 +182,61 @@ FormatterBase = (function() {
 
   FormatterBase.prototype.EXPORT_TYPE_FILES = "files";
 
-  FormatterBase.prototype.identifier = function() {};
+
+  /*
+   name
+  
+   Uses format name on modal panel. Override this at Subclass.
+   */
 
   FormatterBase.prototype.name = function() {};
 
+
+  /*
+   format
+  
+   Uses default file name when its saved. Override this at Subclass.
+   */
+
   FormatterBase.prototype.format = function() {};
+
+
+  /*
+   type
+  
+   `EXPORT_TYPE_FILE` or `EXPORT_TYPE_FILES`. Override this at Subclass.
+   */
 
   FormatterBase.prototype.type = function() {
     return this.constructor.EXPORT_TYPE_FILE;
   };
 
+
+  /*
+   supportClipboard
+  
+   If format supports clipboard then returns `true`.
+   */
+
   FormatterBase.prototype.supportClipboard = function() {
     return true;
   };
 
+
+  /*
+   formatText
+  
+   Converts a Color Dictionary to String. Override this at Subclass.
+   */
+
   FormatterBase.prototype.formatText = function(color, commented) {};
+
+
+  /*
+   formatTextFromColorDictionaries
+  
+   Converts Color Dictionaries to String. Override this at Subclass if needs.
+   */
 
   FormatterBase.prototype.formatTextFromColorDictionaries = function(colorDictionaries) {
     var allColorsString, colorDictionary, i, len, lines;
@@ -196,17 +248,38 @@ FormatterBase = (function() {
     return allColorsString = lines.join("\n");
   };
 
+
+  /*
+   writeStringToFile
+  
+   Writes String type format as file. Override this at Subclass if needs.
+   */
+
   FormatterBase.prototype.writeStringToFile = function(filePath, string) {
     var fileString;
     fileString = NSString.stringWithString(string);
     return fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null);
   };
 
+
+  /*
+   exportAsFile
+  
+   Writes format as file. Override this at Subclass if needs.
+   */
+
   FormatterBase.prototype.exportAsFile = function(colorDictionaries, url) {
     var text;
-    text = this.formatTextFromColorDictionaries(colorDictionaries);
+    text = this.exportAsString(colorDictionaries);
     return this.writeStringToFile(url.path(), text);
   };
+
+
+  /*
+   exportAsString
+  
+   Converts Color Dictionaries to String. Override this at Subclass if needs.
+   */
 
   FormatterBase.prototype.exportAsString = function(colorDictionaries) {
     var text;
@@ -223,10 +296,6 @@ HexFormatter = (function(superClass) {
   function HexFormatter() {
     return HexFormatter.__super__.constructor.apply(this, arguments);
   }
-
-  HexFormatter.prototype.identifier = function() {
-    return "HEX";
-  };
 
   HexFormatter.prototype.name = function() {
     return "HEX CSS";
@@ -256,10 +325,6 @@ RGBACSSFormatter = (function(superClass) {
   function RGBACSSFormatter() {
     return RGBACSSFormatter.__super__.constructor.apply(this, arguments);
   }
-
-  RGBACSSFormatter.prototype.identifier = function() {
-    return "RGBA_CSS";
-  };
 
   RGBACSSFormatter.prototype.name = function() {
     return "RGBA CSS";
@@ -291,10 +356,6 @@ SASSFormatter = (function(superClass) {
     return SASSFormatter.__super__.constructor.apply(this, arguments);
   }
 
-  SASSFormatter.prototype.identifier = function() {
-    return "SASS";
-  };
-
   SASSFormatter.prototype.name = function() {
     return "SASS variables";
   };
@@ -320,10 +381,6 @@ UIColorSwiftFormatter = (function(superClass) {
   function UIColorSwiftFormatter() {
     return UIColorSwiftFormatter.__super__.constructor.apply(this, arguments);
   }
-
-  UIColorSwiftFormatter.prototype.identifier = function() {
-    return "UICOLOR_SWIFT";
-  };
 
   UIColorSwiftFormatter.prototype.name = function() {
     return "UIColor (Swift)";
@@ -358,10 +415,6 @@ UIColorObjCFormatter = (function(superClass) {
     return UIColorObjCFormatter.__super__.constructor.apply(this, arguments);
   }
 
-  UIColorObjCFormatter.prototype.identifier = function() {
-    return "UICOLOR_OBJC";
-  };
-
   UIColorObjCFormatter.prototype.name = function() {
     return "UIColor (Objective-C)";
   };
@@ -395,10 +448,6 @@ AndroidJavaFormatter = (function(superClass) {
     return AndroidJavaFormatter.__super__.constructor.apply(this, arguments);
   }
 
-  AndroidJavaFormatter.prototype.identifier = function() {
-    return "ANDROID";
-  };
-
   AndroidJavaFormatter.prototype.name = function() {
     return "Android ARGB (Java code)";
   };
@@ -428,10 +477,6 @@ AndroidXMLFormatter = (function(superClass) {
     return AndroidXMLFormatter.__super__.constructor.apply(this, arguments);
   }
 
-  AndroidXMLFormatter.prototype.identifier = function() {
-    return "ANDROID_XML";
-  };
-
   AndroidXMLFormatter.prototype.name = function() {
     return "Android ARGB (XML)";
   };
@@ -457,10 +502,6 @@ CLRFormatter = (function(superClass) {
   function CLRFormatter() {
     return CLRFormatter.__super__.constructor.apply(this, arguments);
   }
-
-  CLRFormatter.prototype.identifier = function() {
-    return "CLR";
-  };
 
   CLRFormatter.prototype.name = function() {
     return "CLR (Color Lists)";
