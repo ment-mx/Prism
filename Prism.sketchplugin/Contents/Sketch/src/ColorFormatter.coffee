@@ -15,8 +15,6 @@ class ColorFormatter
     ###
     **************** FORMATS ****************
       HERE is when you have to do the implementation of the new format you want to add.
-
-      all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
     ###
 
     @FORMATS.push new HexFormatter()
@@ -87,29 +85,6 @@ class ColorFormatter
 
     return responseCode
 
-  formatTextFromColorDictionary: (format, colorDictionaries) ->
-    lines = []
-    for colorDictionary in colorDictionaries
-      lines.push @formatColorDictionary_withFormat_commented(colorDictionary,format,true)
-    allColorsString = lines.join("\n")
-
-  writeStringToFile: (filePath, string) ->
-    fileString = NSString.stringWithString( string )
-    fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null)
-
-  ###
-    Takes a color dictionary and a format and returns a formatted string
-    The commented flag is used to add comments (like when we export colors)
-    or removing them (like when we are populating the cell layers with color data)
-  ###
-  formatColorDictionary_withFormat_commented: (colorDictionary, format, commented, url) ->
-    formatIDs = @FORMATS.map (enc) -> enc.id
-    if format in formatIDs
-      eval "this.format_#{format}(colorDictionary, commented, url);"
-    else
-      log "'#{format}' format not implemented."
-
-
   ###
     Takes a MSColor and a name or alias and packs it on a dictionary representation that can be then saved on a layer using the PluginCommand
   ###
@@ -127,9 +102,6 @@ class ColorFormatter
   ###
   @dictionaryToColor: (dictionary) ->
     color = MSColor.colorWithRed_green_blue_alpha(dictionary.red, dictionary.green, dictionary.blue, dictionary.alpha)
-
-
-
 
 ###
 **************** FORMATS ****************
@@ -179,6 +151,8 @@ class FormatterBase
    formatText
 
    Converts a Color Dictionary to String. Override this at Subclass.
+   The commented flag is used to add comments (like when we export colors)
+   or removing them (like when we are populating the cell layers with color data)
   ###
   formatText: (color, commented) ->
 

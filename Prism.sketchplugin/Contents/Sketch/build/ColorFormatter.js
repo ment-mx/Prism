@@ -7,7 +7,6 @@
   to a color Dictionary that can be saved in a layer
  */
 var AndroidJavaFormatter, AndroidXMLFormatter, CLRFormatter, ColorFormatter, FormatterBase, HexFormatter, RGBACSSFormatter, SASSFormatter, UIColorObjCFormatter, UIColorSwiftFormatter,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -21,8 +20,6 @@ ColorFormatter = (function() {
     /*
     **************** FORMATS ****************
       HERE is when you have to do the implementation of the new format you want to add.
-    
-      all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
      */
     this.FORMATS.push(new HexFormatter());
     this.FORMATS.push(new RGBACSSFormatter());
@@ -94,41 +91,6 @@ ColorFormatter = (function() {
         pasteboard.setString_forType(allColorsString, NSPasteboardTypeString);
     }
     return responseCode;
-  };
-
-  ColorFormatter.prototype.formatTextFromColorDictionary = function(format, colorDictionaries) {
-    var allColorsString, colorDictionary, i, len, lines;
-    lines = [];
-    for (i = 0, len = colorDictionaries.length; i < len; i++) {
-      colorDictionary = colorDictionaries[i];
-      lines.push(this.formatColorDictionary_withFormat_commented(colorDictionary, format, true));
-    }
-    return allColorsString = lines.join("\n");
-  };
-
-  ColorFormatter.prototype.writeStringToFile = function(filePath, string) {
-    var fileString;
-    fileString = NSString.stringWithString(string);
-    return fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null);
-  };
-
-
-  /*
-    Takes a color dictionary and a format and returns a formatted string
-    The commented flag is used to add comments (like when we export colors)
-    or removing them (like when we are populating the cell layers with color data)
-   */
-
-  ColorFormatter.prototype.formatColorDictionary_withFormat_commented = function(colorDictionary, format, commented, url) {
-    var formatIDs;
-    formatIDs = this.FORMATS.map(function(enc) {
-      return enc.id;
-    });
-    if (indexOf.call(formatIDs, format) >= 0) {
-      return eval("this.format_" + format + "(colorDictionary, commented, url);");
-    } else {
-      return log("'" + format + "' format not implemented.");
-    }
   };
 
 
@@ -227,6 +189,8 @@ FormatterBase = (function() {
    formatText
   
    Converts a Color Dictionary to String. Override this at Subclass.
+   The commented flag is used to add comments (like when we export colors)
+   or removing them (like when we are populating the cell layers with color data)
    */
 
   FormatterBase.prototype.formatText = function(color, commented) {};
