@@ -15,6 +15,7 @@ class ColorFormatter
     @FORMATS.push new HexFormatter()
     @FORMATS.push new RGBACSSFormatter()
     @FORMATS.push new SASSFormatter()
+    @FORMATS.push new CLRFormatter()
     @FORMATS.push new UIColorSwiftFormatter()
     @FORMATS.push new UIColorObjCFormatter()
     @FORMATS.push new AndroidJavaFormatter()
@@ -43,14 +44,10 @@ class ColorFormatter
     alert.setAccessoryView(accessory)
 
     # add handler for enabling/disabling "Copy to clipboard" button
-    accessory.setCOSJSTargetFunction((sender) ->
+    accessory.setCOSJSTargetFunction((sender) =>
       selection = accessory.indexOfSelectedItem()
-      type = types[selection]
-      switch type
-        when "text"
-          copyButton.setEnabled(true)
-        else
-          copyButton.setEnabled(false)
+      obj = @FORMATS[selection]
+      copyButton.setEnabled(obj.supportClipboard())
     )
 
     responseCode = alert.runModal()
@@ -61,7 +58,7 @@ class ColorFormatter
       when 1000 # Save to file...
         log "Saving..."
         switch formatObj.type()
-          when "text"
+          when FormatterBase.EXPORT_TYPE_FILE
             savePanel = NSSavePanel.savePanel()
             savePanel.setNameFieldStringValue(formatObj.format())
             savePanel.setAllowsOtherFileTypes(true)
@@ -136,6 +133,9 @@ class ColorFormatter
 
 
 class FormatterBase
+  EXPORT_TYPE_FILE: "file"
+  EXPORT_TYPE_FILES: "files"
+
   identifier: ->
 
   name: ->
@@ -143,6 +143,10 @@ class FormatterBase
   format: ->
 
   type: ->
+    @constructor.EXPORT_TYPE_FILE
+
+  supportClipboard: ->
+    true
 
   formatText: (color, commented) ->
 
@@ -170,8 +174,6 @@ class HexFormatter extends FormatterBase
     "HEX CSS"
   format: ->
     "colors.css"
-  type: ->
-      "text"
 
   formatText: (color, commented) ->
     formattedColor = '#' + color.hex
@@ -187,8 +189,6 @@ class RGBACSSFormatter extends FormatterBase
     "RGBA CSS"
   format: ->
     "colors.css"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     alpha = if color.alpha < 1
@@ -208,8 +208,6 @@ class SASSFormatter extends FormatterBase
     "SASS variables"
   format: ->
     "_colors.scss"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     formattedColor = '#' + color.hex
@@ -223,8 +221,6 @@ class UIColorSwiftFormatter extends FormatterBase
     "UIColor (Swift)"
   format: ->
     "colors.m"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     red = Math.round(color.red * 100) / 100
@@ -244,8 +240,6 @@ class UIColorObjCFormatter extends FormatterBase
     "UIColor (Objective-C)"
   format: ->
     "colors.m"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     red = Math.round(color.red * 100) / 100
@@ -265,8 +259,6 @@ class AndroidJavaFormatter extends FormatterBase
     "Android ARGB (Java code)"
   format: ->
     "colors.java"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     formattedColor = "Color.argb(#{Math.round(color.alpha * 255)},#{Math.round(color.red * 255)},#{Math.round(color.green * 255)},#{Math.round(color.blue * 255)});"
@@ -282,10 +274,31 @@ class AndroidXMLFormatter extends FormatterBase
     "Android ARGB (XML)"
   format: ->
     "colors.xml"
-  type: ->
-    "text"
 
   formatText: (color, commented) ->
     formattedColor = "" + helperHex(color.alpha * 255) + color.hex
     xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>"
     xmlVariable
+
+class CLRFormatter extends FormatterBase
+  identifier: ->
+    "CLR"
+  name: ->
+    "clr"
+  format: ->
+    "colors.clr"
+
+  supportClipboard: ->
+    false
+
+  exportAsFile: (colorDictionaries, url) ->
+    colorList = NSColorList.alloc().initWithName("colors")
+    for colorDictionary in colorDictionaries
+      red = Math.round(colorDictionary.red * 100) / 100
+      green = Math.round(colorDictionary.green * 100) / 100
+      blue = Math.round(colorDictionary.blue * 100) / 100
+      alpha = Math.round(colorDictionary.alpha * 100) / 100
+      color = NSColor.colorWithSRGBRed_green_blue_alpha(red, green, blue, alpha)
+      colorList.setColor_forKey(color, colorDictionary.name)
+
+    colorList.writeToFile(url.path())

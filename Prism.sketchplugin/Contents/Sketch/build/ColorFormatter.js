@@ -6,7 +6,7 @@
   it also has the logic to display the color formatter dialog and some class methods to transform a MSColor
   to a color Dictionary that can be saved in a layer
  */
-var AndroidJavaFormatter, AndroidXMLFormatter, ColorFormatter, FormatterBase, HexFormatter, RGBACSSFormatter, SASSFormatter, UIColorObjCFormatter, UIColorSwiftFormatter,
+var AndroidJavaFormatter, AndroidXMLFormatter, CLRFormatter, ColorFormatter, FormatterBase, HexFormatter, RGBACSSFormatter, SASSFormatter, UIColorObjCFormatter, UIColorSwiftFormatter,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
@@ -20,6 +20,7 @@ ColorFormatter = (function() {
     this.FORMATS.push(new HexFormatter());
     this.FORMATS.push(new RGBACSSFormatter());
     this.FORMATS.push(new SASSFormatter());
+    this.FORMATS.push(new CLRFormatter());
     this.FORMATS.push(new UIColorSwiftFormatter());
     this.FORMATS.push(new UIColorObjCFormatter());
     this.FORMATS.push(new AndroidJavaFormatter());
@@ -50,17 +51,14 @@ ColorFormatter = (function() {
     copyButton = alert.addButtonWithTitle('Copy to clipboard');
     alert.addButtonWithTitle('Cancel');
     alert.setAccessoryView(accessory);
-    accessory.setCOSJSTargetFunction(function(sender) {
-      var selection, type;
-      selection = accessory.indexOfSelectedItem();
-      type = types[selection];
-      switch (type) {
-        case "text":
-          return copyButton.setEnabled(true);
-        default:
-          return copyButton.setEnabled(false);
-      }
-    });
+    accessory.setCOSJSTargetFunction((function(_this) {
+      return function(sender) {
+        var obj, selection;
+        selection = accessory.indexOfSelectedItem();
+        obj = _this.FORMATS[selection];
+        return copyButton.setEnabled(obj.supportClipboard());
+      };
+    })(this));
     responseCode = alert.runModal();
     selection = accessory.indexOfSelectedItem();
     formatObj = this.FORMATS[selection];
@@ -68,7 +66,7 @@ ColorFormatter = (function() {
       case 1000:
         log("Saving...");
         switch (formatObj.type()) {
-          case "text":
+          case FormatterBase.EXPORT_TYPE_FILE:
             savePanel = NSSavePanel.savePanel();
             savePanel.setNameFieldStringValue(formatObj.format());
             savePanel.setAllowsOtherFileTypes(true);
@@ -168,13 +166,23 @@ ColorFormatter = (function() {
 FormatterBase = (function() {
   function FormatterBase() {}
 
+  FormatterBase.prototype.EXPORT_TYPE_FILE = "file";
+
+  FormatterBase.prototype.EXPORT_TYPE_FILES = "files";
+
   FormatterBase.prototype.identifier = function() {};
 
   FormatterBase.prototype.name = function() {};
 
   FormatterBase.prototype.format = function() {};
 
-  FormatterBase.prototype.type = function() {};
+  FormatterBase.prototype.type = function() {
+    return this.constructor.EXPORT_TYPE_FILE;
+  };
+
+  FormatterBase.prototype.supportClipboard = function() {
+    return true;
+  };
 
   FormatterBase.prototype.formatText = function(color, commented) {};
 
@@ -228,10 +236,6 @@ HexFormatter = (function(superClass) {
     return "colors.css";
   };
 
-  HexFormatter.prototype.type = function() {
-    return "text";
-  };
-
   HexFormatter.prototype.formatText = function(color, commented) {
     var formattedColor;
     formattedColor = '#' + color.hex;
@@ -263,10 +267,6 @@ RGBACSSFormatter = (function(superClass) {
 
   RGBACSSFormatter.prototype.format = function() {
     return "colors.css";
-  };
-
-  RGBACSSFormatter.prototype.type = function() {
-    return "text";
   };
 
   RGBACSSFormatter.prototype.formatText = function(color, commented) {
@@ -303,10 +303,6 @@ SASSFormatter = (function(superClass) {
     return "_colors.scss";
   };
 
-  SASSFormatter.prototype.type = function() {
-    return "text";
-  };
-
   SASSFormatter.prototype.formatText = function(color, commented) {
     var formattedColor, sassVariableName;
     formattedColor = '#' + color.hex;
@@ -335,10 +331,6 @@ UIColorSwiftFormatter = (function(superClass) {
 
   UIColorSwiftFormatter.prototype.format = function() {
     return "colors.m";
-  };
-
-  UIColorSwiftFormatter.prototype.type = function() {
-    return "text";
   };
 
   UIColorSwiftFormatter.prototype.formatText = function(color, commented) {
@@ -378,10 +370,6 @@ UIColorObjCFormatter = (function(superClass) {
     return "colors.m";
   };
 
-  UIColorObjCFormatter.prototype.type = function() {
-    return "text";
-  };
-
   UIColorObjCFormatter.prototype.formatText = function(color, commented) {
     var alpha, blue, formattedColor, green, red;
     red = Math.round(color.red * 100) / 100;
@@ -419,10 +407,6 @@ AndroidJavaFormatter = (function(superClass) {
     return "colors.java";
   };
 
-  AndroidJavaFormatter.prototype.type = function() {
-    return "text";
-  };
-
   AndroidJavaFormatter.prototype.formatText = function(color, commented) {
     var formattedColor;
     formattedColor = "Color.argb(" + (Math.round(color.alpha * 255)) + "," + (Math.round(color.red * 255)) + "," + (Math.round(color.green * 255)) + "," + (Math.round(color.blue * 255)) + ");";
@@ -456,10 +440,6 @@ AndroidXMLFormatter = (function(superClass) {
     return "colors.xml";
   };
 
-  AndroidXMLFormatter.prototype.type = function() {
-    return "text";
-  };
-
   AndroidXMLFormatter.prototype.formatText = function(color, commented) {
     var formattedColor, xmlVariable;
     formattedColor = "" + helperHex(color.alpha * 255) + color.hex;
@@ -468,5 +448,47 @@ AndroidXMLFormatter = (function(superClass) {
   };
 
   return AndroidXMLFormatter;
+
+})(FormatterBase);
+
+CLRFormatter = (function(superClass) {
+  extend(CLRFormatter, superClass);
+
+  function CLRFormatter() {
+    return CLRFormatter.__super__.constructor.apply(this, arguments);
+  }
+
+  CLRFormatter.prototype.identifier = function() {
+    return "CLR";
+  };
+
+  CLRFormatter.prototype.name = function() {
+    return "clr";
+  };
+
+  CLRFormatter.prototype.format = function() {
+    return "colors.clr";
+  };
+
+  CLRFormatter.prototype.supportClipboard = function() {
+    return false;
+  };
+
+  CLRFormatter.prototype.exportAsFile = function(colorDictionaries, url) {
+    var alpha, blue, color, colorDictionary, colorList, green, i, len, red;
+    colorList = NSColorList.alloc().initWithName("colors");
+    for (i = 0, len = colorDictionaries.length; i < len; i++) {
+      colorDictionary = colorDictionaries[i];
+      red = Math.round(colorDictionary.red * 100) / 100;
+      green = Math.round(colorDictionary.green * 100) / 100;
+      blue = Math.round(colorDictionary.blue * 100) / 100;
+      alpha = Math.round(colorDictionary.alpha * 100) / 100;
+      color = NSColor.colorWithSRGBRed_green_blue_alpha(red, green, blue, alpha);
+      colorList.setColor_forKey(color, colorDictionary.name);
+    }
+    return colorList.writeToFile(url.path());
+  };
+
+  return CLRFormatter;
 
 })(FormatterBase);
