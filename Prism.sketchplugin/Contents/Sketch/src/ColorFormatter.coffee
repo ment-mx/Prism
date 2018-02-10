@@ -281,10 +281,11 @@ class AndroidXMLFormatter extends FormatterBase
     xmlVariable
 
 class CLRFormatter extends FormatterBase
+  # https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/DrawColor/Concepts/AboutColorLists.html
   identifier: ->
     "CLR"
   name: ->
-    "clr"
+    "CLR (Color Lists)"
   format: ->
     "colors.clr"
 

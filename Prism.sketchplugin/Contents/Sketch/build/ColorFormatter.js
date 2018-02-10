@@ -463,7 +463,7 @@ CLRFormatter = (function(superClass) {
   };
 
   CLRFormatter.prototype.name = function() {
-    return "clr";
+    return "CLR (Color Lists)";
   };
 
   CLRFormatter.prototype.format = function() {
