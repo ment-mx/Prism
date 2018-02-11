@@ -5,9 +5,10 @@
   to a color Dictionary that can be saved in a layer
 ###
 class ColorFormatter
-
-  # This is were formats are registred, the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
+  # This is were formats are registred,
   FORMATS: []
+
+  FORMATS_BY_ID: []
 
   colorClassifier: new ColorClassifier()
 
@@ -25,6 +26,9 @@ class ColorFormatter
     @FORMATS.push new UIColorObjCFormatter()
     @FORMATS.push new AndroidJavaFormatter()
     @FORMATS.push new AndroidXMLFormatter()
+
+    for format in @FORMATS
+      @FORMATS_BY_ID[format.id()] = format
 
   ###
     Shows the dialog to export the color dictionaries you provide
@@ -85,6 +89,10 @@ class ColorFormatter
 
     return responseCode
 
+  formatColorDictionary_withFormat_commented: (colorDictionary, format, commented) ->
+    formatter = @FORMATS_BY_ID[format]
+    formatter.formatText(colorDictionary, commented)
+
   ###
     Takes a MSColor and a name or alias and packs it on a dictionary representation that can be then saved on a layer using the PluginCommand
   ###
@@ -112,10 +120,18 @@ class ColorFormatter
  FormatterBase
 
  Base class for each type of formatters. Template Pattern.
+ the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
 ###
 class FormatterBase
   EXPORT_TYPE_FILE: "file"
   EXPORT_TYPE_FILES: "files"
+
+  ###
+   id
+
+   Override this at Subclass.
+  ###
+  id: ->
 
   ###
    name
@@ -194,6 +210,8 @@ class FormatterBase
     text = @formatTextFromColorDictionaries(colorDictionaries)
 
 class HexFormatter extends FormatterBase
+  id: ->
+    "HEX"
   name: ->
     "HEX CSS"
   format: ->
@@ -207,6 +225,8 @@ class HexFormatter extends FormatterBase
       formattedColor
 
 class RGBACSSFormatter extends FormatterBase
+  id: ->
+    "RGBA_CSS"
   name: ->
     "RGBA CSS"
   format: ->
@@ -224,7 +244,8 @@ class RGBACSSFormatter extends FormatterBase
       formattedColor
 
 class SASSFormatter extends FormatterBase
-
+  id: ->
+    "SASS"
   name: ->
     "SASS variables"
   format: ->
@@ -236,7 +257,8 @@ class SASSFormatter extends FormatterBase
     "#{sassVariableName}: #{formattedColor};"
 
 class UIColorSwiftFormatter extends FormatterBase
-
+  id: ->
+    "UICOLOR_SWIFT"
   name: ->
     "UIColor (Swift)"
   format: ->
@@ -254,7 +276,8 @@ class UIColorSwiftFormatter extends FormatterBase
       formattedColor
 
 class UIColorObjCFormatter extends FormatterBase
-
+  id: ->
+    "UICOLOR_OBJC"
   name: ->
     "UIColor (Objective-C)"
   format: ->
@@ -272,7 +295,8 @@ class UIColorObjCFormatter extends FormatterBase
       formattedColor
 
 class AndroidJavaFormatter extends FormatterBase
-
+  id: ->
+    "ANDROID"
   name: ->
     "Android ARGB (Java code)"
   format: ->
@@ -286,7 +310,8 @@ class AndroidJavaFormatter extends FormatterBase
       formattedColor
 
 class AndroidXMLFormatter extends FormatterBase
-
+  id: ->
+    "ANDROID_XML"
   name: ->
     "Android ARGB (XML)"
   format: ->
@@ -299,7 +324,8 @@ class AndroidXMLFormatter extends FormatterBase
 
 class CLRFormatter extends FormatterBase
   # https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/DrawColor/Concepts/AboutColorLists.html
-
+  id: ->
+    "CLR"
   name: ->
     "CLR (Color Lists)"
   format: ->
