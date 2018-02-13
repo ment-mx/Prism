@@ -2,7 +2,8 @@
 class ColorSetFormatter extends FormatterBase
   # Asset Catalog Format Reference: Named Color Type https://developer.apple.com/library/content/documentation/Xcode/Reference/xcode_ref-Asset_Catalog_Format/Named_Color.html
   # Asset catalog colors on Xcode 9 – Zeplin Gazette https://blog.zeplin.io/asset-catalog-colors-on-xcode-9-c4fdccc0381a
-
+  id: ->
+    "COLORSET"
   name: ->
     "Color set (Xcode named color)"
 
