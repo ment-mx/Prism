@@ -2,7 +2,7 @@
   <img src="http://www.ment.com.mx/prism/logo.png" style="width: 100%; max-width:800px;" />
 </p>
 
-|  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] | 
+|  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] |
 
 <p align="center">
   <img src="http://www.ment.com.mx/prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
@@ -10,7 +10,7 @@
 
 _(Formerly **ShareableColorPalette**)_
 
-Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch **41**)_ 
+Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch **41**)_
 
 **Important: Make sure to download version 1.0.3 to use Sketch 45 plugin auto updates.** 😎
 
@@ -79,48 +79,9 @@ Prism offers a lot of freedom to let you customize your own templates, however, 
 * Your template **must** have a layer group named exactly "Cell", everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
 * Inside the "Cell" group there must be a layer named exactly "Color", it must have at least one solid Fill and this fill must be on the bottom of all the other fills, this layer is the one that Prism uses to display the real color.
 * Inside the "Cell" group there must be a **text** layer named exactly "Name" (lol), this is the layer that Prism uses to display the automatic name and can be edited to add or remove aliases.
-* Prism uses the name of the text layers to format the color of the cell, for example: if there's a text layer named "RGBA_CSS" , prism will try set the layer's text value to the specified format. this format must be specified and implemented inside the `ColorFormatter.coffee` file. Here is the "RGBA_CSS" format specification:
+* Prism uses the name of the text layers to format the color of the cell, for example: if there's a text layer named "RGBA_CSS" , prism will try set the layer's text value to the specified format.
 
-_ColorFormatter.coffee_ This is where the format is registered
-```coffeescript
-  # This is were formats are registered, the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
-  FORMATS: [
-    { id: "HEX", name: "HEX CSS", format: "colors.css" }
-    { id: "RGBA_CSS", name: "RGBA CSS", format: "colors.css" }
-    { id: "SASS", name: "SASS variables", format: "_colors.scss" }
-    { id: "UICOLOR_SWIFT", name: "UIColor (Swift)", format: "colors.swift" }
-    { id: "UICOLOR_OBJC", name: "UIColor (Objective-C)", format: "colors.m" }
-    { id: "ANDROID", name: "Android ARGB Color", format: "colors.java" }
-  ]
-```
 
-Then implement it in the same file
-```coffeescript
-  ###
-    HERE is when you have to do the implementation of the new format you want to add.
-    all these methods must be prefixed with "format_" and then the format ID specified in the FORMATS array
-    The commented flag is used to add comments (like when we export colors)
-    or removing them (like when we are populating the cell layers with color data)
-
-    the color variable that is passed is a dictionary with all the information you need:
-      name: the default name of the color or the alias if it exists
-      hex: color's hex value without the leading '#'
-      red: color's red value from 0 to 1
-      blue: color's blue value from 0 to 1
-      green: color's green value from 0 to 1
-      alpha: color's alpha value from 0 to 1
-  ###
-  format_RGBA_CSS: (color, commented) ->
-    alpha = if color.alpha < 1
-      color.alpha.toFixed(2)
-    else
-      color.alpha
-    formattedColor = "rgba(#{Math.round(color.red * 255)},#{Math.round(color.green * 255)},#{Math.round(color.blue * 255)},#{alpha});"
-    if commented
-      "#{formattedColor} /* #{color.name} */"
-    else
-      formattedColor
-```
 You can have as many text layers for formats as you want. Also, layers can be locked or invisible as long as they conform to this restrictions.
 
 <p align="center">
@@ -134,13 +95,16 @@ If you wanna dive deeper on this process, you should check out the `Cell.coffee`
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
 
 I have included a `compile.sh` file that automatically compiles all the files inside the src/ folder into the build/ folder, however, if you add new files you must import them in the right order inside the `Prism.cocoascript` file.
-You can run the compile.sh file by typing this in the terminal inside the Prism.sketchplugin/Content/Sketch folder:
+
+*You will need coffescript v1 for the plugin to work as v1 compiles to EC5 syntax accepted by cocoascript*
+
+You can easily install it with npm by running this:
+`npm install --global coffeescript@1.12.7`
+
+You can then run the compile.sh file by typing this in the terminal inside the Prism.sketchplugin/Content/Sketch folder:
 ```shell
   ./compile.sh
 ```
-This will compile your files as soon as they are saved, as long as the process is running. To stop the process just `Ctrl-C` out of it ;)
-
-
 <h2>What's next</h2>
 
 * Gradients support
