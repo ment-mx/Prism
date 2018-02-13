@@ -92,6 +92,20 @@ If you wanna dive deeper on this process, you should check out the `Cell.coffee`
 
 <h4>Adding Format</h4>
 
+1. Create a new formatter Coffeescript file inside `src/formats`
+2. Create a subclass of `FormatterBase` for your new formatter class.
+3. Overrides some methods defined in `FormatterBase.coffee`.
+    - `id` and `name` are required to override.
+    - If you plan to one text based format file like `HexFormatter`, then
+        - `formatText` and `format` required to override.
+    - If you plan to one binary format file like `CLRFormatter`, then
+        - You need to override `supportClipboard` to return` false`
+        - You need to override `exportAsFile`.
+    - If you plan to export several files like `ColorSetFormatter`, then
+        - You need to override `type` to return `EXPORT_TYPE_FILES`
+
+See `FormatterBase.coffee` for details.
+
 <h2>Contribute</h2>
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
 
