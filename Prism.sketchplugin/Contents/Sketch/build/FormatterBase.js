@@ -11,9 +11,9 @@ var FormatterBase;
 FormatterBase = (function() {
   function FormatterBase() {}
 
-  FormatterBase.prototype.EXPORT_TYPE_FILE = "file";
+  FormatterBase.EXPORT_TYPE_FILE = "file";
 
-  FormatterBase.prototype.EXPORT_TYPE_FILES = "files";
+  FormatterBase.EXPORT_TYPE_FILES = "files";
 
 
   /*

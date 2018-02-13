@@ -22,6 +22,7 @@ class ColorFormatter
     @FORMATS.push new RGBACSSFormatter()
     @FORMATS.push new SASSFormatter()
     @FORMATS.push new CLRFormatter()
+    @FORMATS.push new ColorSetFormatter()
     @FORMATS.push new UIColorSwiftFormatter()
     @FORMATS.push new UIColorObjCFormatter()
     @FORMATS.push new AndroidJavaFormatter()
@@ -76,8 +77,20 @@ class ColorFormatter
             if savePanel.runModal()
               formatObj.exportAsFile(colorDictionaries, savePanel.URL())
 
+          when FormatterBase.EXPORT_TYPE_FILES
+            panel = NSOpenPanel.openPanel()
+            panel.prompt = "Export"
+            panel.message = "Choose export directory"
+            panel.canChooseFiles = false
+            panel.canChooseDirectories = true
+            panel.allowsMultipleSelection = false
+            panel.canCreateDirectories = true
+
+            if panel.runModal()
+              formatObj.exportAsFile(colorDictionaries, panel.URL())
+
           else
-            log "Not implemented CLR"
+            log "Unknown type"
 
       when 1001 # Copy to clipboard
         log "Copying..."

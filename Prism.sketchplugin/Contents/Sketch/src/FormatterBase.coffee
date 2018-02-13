@@ -6,8 +6,8 @@
  the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
 ###
 class FormatterBase
-  EXPORT_TYPE_FILE: "file"
-  EXPORT_TYPE_FILES: "files"
+  @EXPORT_TYPE_FILE: "file"
+  @EXPORT_TYPE_FILES: "files"
 
   ###
    id
