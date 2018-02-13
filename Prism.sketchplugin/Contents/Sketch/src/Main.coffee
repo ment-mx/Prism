@@ -49,7 +49,6 @@ exportAll = (context) ->
   colorFormatter = new ColorFormatter()
   responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries)
   #Confirmation messages ;)
-  context.document.hideMessage()
   switch responseCode
     when 1000 # Save to file...
       context.document.showMessage "Your colors were successfully saved!"
@@ -75,7 +74,6 @@ exportSelected = (context) ->
   colorFormatter = new ColorFormatter()
   responseCode = colorFormatter.showDialogWithColorDictionaries(colorDictionaries)
   #Confirmation messages ;)
-  context.document.hideMessage()
   switch responseCode
     when 1000 # Save to file...
       context.document.showMessage "Your colors were successfully saved!"

@@ -5,19 +5,30 @@
   to a color Dictionary that can be saved in a layer
 ###
 class ColorFormatter
+  # This is were formats are registred,
+  FORMATS: []
 
-  # This is were formats are registred, the ID must be unique, the name is a human readable mini description, the format is used to use a custom file extension when saving colors to a file
-  FORMATS: [
-    { id: "HEX", name: "HEX CSS", format: "colors.css" }
-    { id: "RGBA_CSS", name: "RGBA CSS", format: "colors.css" }
-    { id: "SASS", name: "SASS variables", format: "_colors.scss" }
-    { id: "UICOLOR_SWIFT", name: "UIColor (Swift)", format: "colors.swift" }
-    { id: "UICOLOR_OBJC", name: "UIColor (Objective-C)", format: "colors.m" }
-    { id: "ANDROID", name: "Android ARGB (Java code)", format: "colors.java" }
-    { id: "ANDROID_XML", name: "Android ARGB (XML)", format: "colors.xml" }
-  ]
+  FORMATS_BY_ID: []
 
   colorClassifier: new ColorClassifier()
+
+  constructor: () ->
+    ###
+    **************** FORMATS ****************
+      HERE is when you have to do the implementation of the new format you want to add.
+    ###
+
+    @FORMATS.push new HexFormatter()
+    @FORMATS.push new RGBACSSFormatter()
+    @FORMATS.push new SASSFormatter()
+    @FORMATS.push new CLRFormatter()
+    @FORMATS.push new UIColorSwiftFormatter()
+    @FORMATS.push new UIColorObjCFormatter()
+    @FORMATS.push new AndroidJavaFormatter()
+    @FORMATS.push new AndroidXMLFormatter()
+
+    for format in @FORMATS
+      @FORMATS_BY_ID[format.id()] = format
 
   ###
     Shows the dialog to export the color dictionaries you provide
@@ -25,7 +36,9 @@ class ColorFormatter
   ###
   showDialogWithColorDictionaries: (colorDictionaries) ->
     #All format names as array
-    names = @FORMATS.map (enc) -> enc.name
+    names = @FORMATS.map (enc) -> enc.name()
+    #All format types as array
+    types = @FORMATS.map (enc) -> enc.type()
 
     accessory = NSPopUpButton.alloc().initWithFrame_pullsDown(NSMakeRect(0,0,400,25),false)
     accessory.addItemsWithTitles(names)
@@ -35,53 +48,50 @@ class ColorFormatter
     alert.setMessageText("Export colors")
     alert.setInformativeText("Select the color format:")
     alert.addButtonWithTitle('Save to file...')
-    alert.addButtonWithTitle('Copy to clipboard')
+    copyButton = alert.addButtonWithTitle('Copy to clipboard')
     alert.addButtonWithTitle('Cancel')
     alert.setAccessoryView(accessory)
 
+    # add handler for enabling/disabling "Copy to clipboard" button
+    accessory.setCOSJSTargetFunction((sender) =>
+      selection = accessory.indexOfSelectedItem()
+      obj = @FORMATS[selection]
+      copyButton.setEnabled(obj.supportClipboard())
+    )
+
     responseCode = alert.runModal()
     selection = accessory.indexOfSelectedItem()
-
-    lines = []
-    for colorDictionary in colorDictionaries
-      format = @FORMATS[selection].id
-      lines.push @formatColorDictionary_withFormat_commented(colorDictionary,format,true)
-    allColorsString = lines.join("\n")
+    formatObj = @FORMATS[selection]
 
     switch responseCode
       when 1000 # Save to file...
         log "Saving..."
-        savePanel = NSSavePanel.savePanel()
-        savePanel.setNameFieldStringValue(@FORMATS[selection].format)
-        savePanel.setAllowsOtherFileTypes(true)
-        savePanel.setExtensionHidden(false)
+        switch formatObj.type()
+          when FormatterBase.EXPORT_TYPE_FILE
+            savePanel = NSSavePanel.savePanel()
+            savePanel.setNameFieldStringValue(formatObj.format())
+            savePanel.setAllowsOtherFileTypes(true)
+            savePanel.setExtensionHidden(false)
 
-        if savePanel.runModal()
-          filePath = savePanel.URL().path()
-          fileString = NSString.stringWithString( allColorsString )
-          fileString.writeToFile_atomically_encoding_error(filePath, true, NSUTF8StringEncoding, null)
+            if savePanel.runModal()
+              formatObj.exportAsFile(colorDictionaries, savePanel.URL())
+
+          else
+            log "Not implemented CLR"
 
       when 1001 # Copy to clipboard
         log "Copying..."
+        allColorsString = formatObj.exportAsString(colorDictionaries)
+
         pasteboard = NSPasteboard.generalPasteboard()
         pasteboard.declareTypes_owner( [ NSPasteboardTypeString], null )
         pasteboard.setString_forType( allColorsString, NSPasteboardTypeString )
 
     return responseCode
 
-
-  ###
-    Takes a color dictionary and a format and returns a formatted string
-    The commented flag is used to add comments (like when we export colors)
-    or removing them (like when we are populating the cell layers with color data)
-  ###
   formatColorDictionary_withFormat_commented: (colorDictionary, format, commented) ->
-    formatIDs = @FORMATS.map (enc) -> enc.id
-    if format in formatIDs
-      eval "this.format_#{format}(colorDictionary, commented);"
-    else
-      log "'#{format}' format not implemented."
-
+    formatter = @FORMATS_BY_ID[format]
+    formatter.formatText(colorDictionary, commented)
 
   ###
     Takes a MSColor and a name or alias and packs it on a dictionary representation that can be then saved on a layer using the PluginCommand
@@ -89,7 +99,7 @@ class ColorFormatter
   @colorToDictionary: (color, name) ->
     dictionary =
       name: name
-      hex: color.immutableModelObject().hexValue() 
+      hex: color.immutableModelObject().hexValue()
       red: color.red()
       blue: color.blue()
       green: color.green()
@@ -100,69 +110,3 @@ class ColorFormatter
   ###
   @dictionaryToColor: (dictionary) ->
     color = MSColor.colorWithRed_green_blue_alpha(dictionary.red, dictionary.green, dictionary.blue, dictionary.alpha)
-
-  ###
-  **************** FORMATS ****************
-    HERE is when you have to do the implementation of the new format you want to add.
-
-    all these methods must be prefixed with "format_" and then the format ID specified in he FORMATS constant
-  ###
-
-  format_HEX: (color, commented) ->
-    formattedColor = '#' + color.hex
-    if commented
-      "#{formattedColor}; /* #{color.name} */"
-    else
-      formattedColor
-
-  format_RGBA_CSS: (color, commented) ->
-    alpha = if color.alpha < 1
-      color.alpha.toFixed(2)
-    else
-      color.alpha
-    formattedColor = "rgba(#{Math.round(color.red * 255)},#{Math.round(color.green * 255)},#{Math.round(color.blue * 255)},#{alpha});"
-    if commented
-      "#{formattedColor} /* #{color.name} */"
-    else
-      formattedColor
-
-  format_ANDROID: (color, commented) ->
-    formattedColor = "Color.argb(#{Math.round(color.alpha * 255)},#{Math.round(color.red * 255)},#{Math.round(color.green * 255)},#{Math.round(color.blue * 255)});"
-    if commented
-      "#{formattedColor} // #{color.name}"
-    else
-      formattedColor
-
-  format_ANDROID_XML: (color, commented) ->
-    formattedColor = "" + helperHex(color.alpha * 255) + color.hex
-    xmlVariable = '<color name="' + color.name.toLowerCase().trim().split(" ").join("_") + '">#' + formattedColor + "</color>"
-    xmlVariable
-
-
-  format_SASS: (color, commented) ->
-    formattedColor = '#' + color.hex
-    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "")
-    "#{sassVariableName}: #{formattedColor};"
-
-  format_UICOLOR_SWIFT: (color, commented) ->
-    red = Math.round(color.red * 100) / 100
-    green = Math.round(color.green * 100) / 100
-    blue = Math.round(color.blue * 100) / 100
-    alpha = Math.round(color.alpha * 100) / 100
-    formattedColor = "UIColor(red:#{red}, green:#{green}, blue:#{blue}, alpha:#{alpha})"
-    if commented
-      "#{formattedColor} // #{color.name}"
-    else
-      formattedColor
-
-
-  format_UICOLOR_OBJC: (color, commented) ->
-    red = Math.round(color.red * 100) / 100
-    green = Math.round(color.green * 100) / 100
-    blue = Math.round(color.blue * 100) / 100
-    alpha = Math.round(color.alpha * 100) / 100
-    formattedColor = "[UIColor colorWithRed:#{red} green:#{green} blue:#{blue} alpha:#{alpha}];"
-    if commented
-      "#{formattedColor} // #{color.name}"
-    else
-      formattedColor
