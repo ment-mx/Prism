@@ -90,6 +90,7 @@ You can have as many text layers for formats as you want. Also, layers can be lo
 
 If you wanna dive deeper on this process, you should check out the `Cell.coffee` and `Template.coffee` files.
 
+<h4>Adding Format</h4>
 
 <h2>Contribute</h2>
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
