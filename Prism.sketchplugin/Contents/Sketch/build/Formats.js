@@ -143,7 +143,7 @@ ColorSetFormatter = (function(superClass) {
       colorsetURL = url.URLByAppendingPathComponent(fileName);
       manager.createDirectoryAtPath_withIntermediateDirectories_attributes_error(colorsetURL.path(), true, null, null);
       path = colorsetURL.path();
-      fileString = NSString.stringWithString(JSON.stringify(obj));
+      fileString = NSString.stringWithString(JSON.stringify(obj, null, 4));
       results.push(fileString.writeToFile_atomically_encoding_error(path + "/Contents.json", true, NSUTF8StringEncoding, null));
     }
     return results;

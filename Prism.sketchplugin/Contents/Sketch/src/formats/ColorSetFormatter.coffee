@@ -27,7 +27,7 @@ class ColorSetFormatter extends FormatterBase
         null
       )
       path = colorsetURL.path()
-      fileString = NSString.stringWithString(JSON.stringify(obj))
+      fileString = NSString.stringWithString(JSON.stringify(obj, null, 4))
       fileString.writeToFile_atomically_encoding_error(
         "#{path}/Contents.json",
         true,
