@@ -115,6 +115,10 @@ ColorSetFormatter = (function(superClass) {
     return ColorSetFormatter.__super__.constructor.apply(this, arguments);
   }
 
+  ColorSetFormatter.prototype.id = function() {
+    return "COLORSET";
+  };
+
   ColorSetFormatter.prototype.name = function() {
     return "Color set (Xcode named color)";
   };
