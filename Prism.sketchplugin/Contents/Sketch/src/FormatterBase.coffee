@@ -27,6 +27,7 @@ class FormatterBase
    format
 
    Uses default file name when its saved. Override this at Subclass.
+   This method will be called only `type` returns `EXPORT_TYPE_FILE`.
   ###
   format: ->
 
@@ -34,6 +35,8 @@ class FormatterBase
    type
 
    `EXPORT_TYPE_FILE` or `EXPORT_TYPE_FILES`. Override this at Subclass.
+   `EXPORT_TYPE_FILE` means 1 file will be exported. and Prism shows Save dialog.
+   `EXPORT_TYPE_FILES` means several files will be exported. Prism shows dialog to get export directory.
   ###
   type: ->
     @constructor.EXPORT_TYPE_FILE
@@ -41,7 +44,8 @@ class FormatterBase
   ###
    supportClipboard
 
-   If format supports clipboard then returns `true`.
+   If format supports clipboard then returns `true`. Text format should better support this basically.
+   If your format is binary then should return `false`.
   ###
   supportClipboard: ->
     true
