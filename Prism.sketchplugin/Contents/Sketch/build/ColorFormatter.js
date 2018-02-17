@@ -26,6 +26,7 @@ ColorFormatter = (function() {
     this.FORMATS.push(new RGBACSSFormatter());
     this.FORMATS.push(new SASSFormatter());
     this.FORMATS.push(new CLRFormatter());
+    this.FORMATS.push(new ColorSetFormatter());
     this.FORMATS.push(new UIColorSwiftFormatter());
     this.FORMATS.push(new UIColorObjCFormatter());
     this.FORMATS.push(new AndroidJavaFormatter());
@@ -44,7 +45,7 @@ ColorFormatter = (function() {
    */
 
   ColorFormatter.prototype.showDialogWithColorDictionaries = function(colorDictionaries) {
-    var accessory, alert, allColorsString, copyButton, formatObj, names, pasteboard, responseCode, savePanel, selection, types;
+    var accessory, alert, allColorsString, copyButton, formatObj, names, panel, pasteboard, responseCode, savePanel, selection, types;
     names = this.FORMATS.map(function(enc) {
       return enc.name();
     });
@@ -85,8 +86,20 @@ ColorFormatter = (function() {
               formatObj.exportAsFile(colorDictionaries, savePanel.URL());
             }
             break;
+          case FormatterBase.EXPORT_TYPE_FILES:
+            panel = NSOpenPanel.openPanel();
+            panel.prompt = "Export";
+            panel.message = "Choose export directory";
+            panel.canChooseFiles = false;
+            panel.canChooseDirectories = true;
+            panel.allowsMultipleSelection = false;
+            panel.canCreateDirectories = true;
+            if (panel.runModal()) {
+              formatObj.exportAsFile(colorDictionaries, panel.URL());
+            }
+            break;
           default:
-            log("Not implemented CLR");
+            log("Unknown type");
         }
         break;
       case 1001:
