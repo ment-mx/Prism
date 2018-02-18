@@ -27,6 +27,7 @@ class ColorFormatter
     @FORMATS.push new UIColorObjCFormatter()
     @FORMATS.push new AndroidJavaFormatter()
     @FORMATS.push new AndroidXMLFormatter()
+    @FORMATS.push new SketchMeasureFormatter()
 
     for format in @FORMATS
       @FORMATS_BY_ID[format.id()] = format
