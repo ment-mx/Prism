@@ -49,5 +49,18 @@
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.5.zip" sparkle:version="1.0.5" />
       </item>
+     <item>
+        <title>Version 1.0.6</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Adds clr export format.</li>
+              <li>Adds colorset export format.</li>
+              <li>New format structure.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.6.zip" sparkle:version="1.0.6" />
+      </item>
   </channel>
 </rss>
