@@ -129,9 +129,10 @@ You can then run the compile.sh file by typing this in the terminal inside the P
 <h2>Credits</h2>
 
 - [Lalo](https://github.com/LaloMrtnz) & [Adrxx](https://github.com/Adrxx): **Creators**
+- [griffin-stewie](https://github.com/griffin-stewie): New format structure
 - Special thanks to [Gauth](http://gauth.fr/2011/09/get-a-color-name-from-any-rgb-combination/) for his color classifier and dataset.
 
-[Download]:https://github.com/ment-mx/Prism/archive/master.zip
+[Download]:https://github.com/ment-mx/Prism/releases
 [Features]:https://github.com/LaloMrtnz/Prism#features
 [Usage]:https://github.com/LaloMrtnz/Prism#usage
 [Customization]:https://github.com/LaloMrtnz/Prism#customization
