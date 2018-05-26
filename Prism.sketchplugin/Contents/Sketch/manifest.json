@@ -40,9 +40,9 @@
       "script" : "Prism.cocoascript",
       "handlers" : {
         "actions" : {
-           "TextChanged.finish" : "colorNameChanged",
+           "TextChanged.finish" : "colorNameChanged"
            }
-          },
+          }
     }
   ],
   "menu" : {
@@ -52,7 +52,7 @@
       "exportAll",
       "exportSelected",
       "openTemplate"
-    ],
-  },
+    ]
+  }
 
 }
