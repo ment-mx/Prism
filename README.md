@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/logo.png" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/logo.png" style="width: 100%; max-width:800px;" />
 </p>
 
 |  [Download][] | [Features][] | [Usage][] | [Customization][] | [Changelog][] | [Next][] | [Contribute][] | [Credits][] |
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/ClassicSample.png" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/ClassicSample.png" style="width: 100%; max-width:800px;" />
 </p>
 
 _(Formerly **ShareableColorPalette**)_
@@ -40,7 +40,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 4. Voilà!
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/CreatePalette.gif" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/CreatePalette.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h4>Changing a Color Alias</h4>
@@ -48,7 +48,7 @@ Creates a beautiful artboard with all the colors in your 'Document Colors' with 
 To change the color alias, just change the text on the *Name* layer. If you want the default color name, just delete the text on that same layer.
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/changealias.gif" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/changealias.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h4>Exporting Colors as Code</h4>
@@ -59,7 +59,7 @@ To change the color alias, just change the text on the *Name* layer. If you want
 4. Save your color code file or copy the colors to clipboard.
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/ExportColorCode.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h2>Customization</h2>
@@ -69,7 +69,7 @@ Under the Prism menu, there's an option called **Show Template File...** that op
 The template file is a normal sketch file that has multiple pages, each page with its own cell Template, you can add or remove all the pages you want to manage your own templates, to select the style you want just open the file and save it on the page your desired template is. Now just generate your palette to see the changes.
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/ChangeTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 <h4>Editing Template</h4>
@@ -85,7 +85,7 @@ Prism offers a lot of freedom to let you customize your own templates, however, 
 You can have as many text layers for formats as you want. Also, layers can be locked or invisible as long as they conform to this restrictions.
 
 <p align="center">
-  <img src="http://www.ment.com.mx/prism/EditTemplate.gif" style="width: 100%; max-width:800px;" />
+  <img src="https://s3.amazonaws.com/prism-plugin/EditTemplate.gif" style="width: 100%; max-width:800px;" />
 </p>
 
 If you wanna dive deeper on this process, you should check out the `Cell.coffee` and `Template.coffee` files.
