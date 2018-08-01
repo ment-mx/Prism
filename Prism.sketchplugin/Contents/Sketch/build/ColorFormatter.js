@@ -31,6 +31,7 @@ ColorFormatter = (function() {
     this.FORMATS.push(new UIColorObjCFormatter());
     this.FORMATS.push(new AndroidJavaFormatter());
     this.FORMATS.push(new AndroidXMLFormatter());
+    this.FORMATS.push(new SketchMeasureFormatter());
     ref = this.FORMATS;
     for (i = 0, len = ref.length; i < len; i++) {
       format = ref[i];
