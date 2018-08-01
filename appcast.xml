@@ -62,5 +62,16 @@
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.6.zip" sparkle:version="1.0.6" />
       </item>
+         <item>
+        <title>Version 1.0.7</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Added Sketch Measure JSON support.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.7.zip" sparkle:version="1.0.7" />
+      </item>
   </channel>
 </rss>
