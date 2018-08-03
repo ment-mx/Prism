@@ -10,7 +10,7 @@
 
 _(Formerly **ShareableColorPalette**)_
 
-Creates a beautiful artboard with all the colors in your 'Document Colors' with its respective color label in a variety of formats.  _(Sketch **41**)_
+Creates a beautiful artboard with all the colors in your `Document Colors` with its respective color label in a variety of formats.  _(Sketch **41**)_
 
 **Important: Make sure to download version 1.0.3 or higher to use Sketch 45 plugin auto updates.** 😎
 
@@ -54,7 +54,7 @@ To change the color alias, just change the text on the *Name* layer. If you want
 <h4>Exporting Colors as Code</h4>
 
 1. Select the colors you want to export *(optional)*
-2. Click Export Selected Colors **[ctrl cmd s]** or Export All Colors **[ctrl cmd e]**
+2. Click `Export Selected Colors` **[ctrl cmd s]** or `Export All Colors` **[ctrl cmd e]**
 3. Select the format to export.
 4. Save your color code file or copy the colors to clipboard.
 
@@ -63,7 +63,7 @@ To change the color alias, just change the text on the *Name* layer. If you want
 </p>
 
 <h2>Customization</h2>
-Under the Prism menu, there's an option called **Show Template File...** that opens the Template.sketch file located under the Prism.sketchplugin package, this file contains the all the layers that are used as templates and are later copied over to your palette.
+Under the Prism menu, there's an option called **Show Template File...** that opens the Template.sketch file located under the Prism.sketchplugin package, this file contains all the layers that are used as templates and are later copied over to your palette.
 
 <h4>Changing Palette Template</h4>
 The template file is a normal sketch file that has multiple pages, each page with its own cell Template, you can add or remove all the pages you want to manage your own templates, to select the style you want just open the file and save it on the page your desired template is. Now just generate your palette to see the changes.
@@ -75,11 +75,11 @@ The template file is a normal sketch file that has multiple pages, each page wit
 <h4>Editing Template</h4>
 
 Prism offers a lot of freedom to let you customize your own templates, however, in order for your template to play nicely with Prism you just have a few restrictions:
-* Your template page must have only one artboard layer that is exactly named "Prism Palette", users can then change the name of the artboard once the palatte is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-artboard to specify the spacing between cells.
-* Your template **must** have a layer group named exactly "Cell", everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
-* Inside the "Cell" group there must be a layer named exactly "Color", it must have at least one solid Fill and this fill must be on the bottom of all the other fills, this layer is the one that Prism uses to display the real color.
-* Inside the "Cell" group there must be a **text** layer named exactly "Name" (lol), this is the layer that Prism uses to display the automatic name and can be edited to add or remove aliases.
-* Prism uses the name of the text layers to format the color of the cell, for example: if there's a text layer named "RGBA_CSS" , prism will try set the layer's text value to the specified format.
+* Your template page must have only one artboard layer that is exactly named `Prism Palette`, users can then change the name of the artboard once the palette is generated in their sketch files. Your cell doesn't have to be inside this artboard, but it would be good practice, as future releases may use this cell-inside-artboard to specify the spacing between cells.
+* Your template **must** have a layer group named exactly `Cell`, everything that your cell includes must be inside this group, you can then go ahead and add as many groups as you like inside of it ;)
+* Inside the `Cell` group there must be a layer named exactly `Color`, it must have at least one solid Fill and this fill must be on the bottom of all the other fills, this layer is the one that Prism uses to display the real color.
+* Inside the `Cell` group there must be a **text** layer named exactly `Name` (lol), this is the layer that Prism uses to display the automatic name and can be edited to add or remove aliases.
+* Prism uses the name of the text layers to format the color of the cell, for example: if there's a text layer named "RGBA_CSS", prism will try set the layer's text value to the specified format.
 
 
 You can have as many text layers for formats as you want. Also, layers can be locked or invisible as long as they conform to this restrictions.
@@ -109,14 +109,14 @@ See `FormatterBase.coffee` for details.
 <h2>Contribute</h2>
 The best way to get things done is by doing them yourself, if you want to specify a format or a add a new feature or fix a bug, just submit a pull request!
 
-I have included a `compile.sh` file that automatically compiles all the files inside the src/ folder into the build/ folder, however, if you add new files you must import them in the right order inside the `Prism.cocoascript` file.
+I have included a `compile.sh` file that automatically compiles all the files inside the `src/` folder into the `build/` folder, however, if you add new files you must import them in the right order inside the `Prism.cocoascript` file.
 
 *You will need coffescript v1 for the plugin to work as v1 compiles to EC5 syntax accepted by cocoascript*
 
 You can easily install it with npm by running this:
 `npm install --global coffeescript@1.12.7`
 
-You can then run the compile.sh file by typing this in the terminal inside the Prism.sketchplugin/Content/Sketch folder:
+You can then run the `compile.sh` file by typing this in the terminal inside the `Prism.sketchplugin/Content/Sketch` folder:
 ```shell
   ./compile.sh
 ```
