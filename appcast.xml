@@ -62,7 +62,7 @@
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.6.zip" sparkle:version="1.0.6" />
       </item>
-         <item>
+      <item>
         <title>Version 1.0.7</title>
         <description>
           <![CDATA[
@@ -72,6 +72,17 @@
           ]]>
         </description>
         <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.7.zip" sparkle:version="1.0.7" />
-      </item>
+     </item>
+      <item>
+        <title>Version 1.0.8</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Updated for Sketch 53.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/ment-mx/Prism/archive/1.0.8.zip" sparkle:version="1.0.8" />
+       </item>
   </channel>
 </rss>
