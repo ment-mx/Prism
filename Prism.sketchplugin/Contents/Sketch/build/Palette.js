@@ -17,7 +17,7 @@ Palette = (function(superClass) {
   Palette.prototype.colorClassifier = new ColorClassifier();
 
   function Palette(context, layer) {
-    var children, i, j, ref;
+    var children, color, colorsArray, documentColorAssets, i, j, ref;
     if (layer == null) {
       layer = null;
     }
@@ -32,7 +32,12 @@ Palette = (function(superClass) {
       }
     }
     if (this.context.document) {
-      this.colors = this.context.document.documentData().assets().colors();
+      documentColorAssets = this.context.document.documentData().assets().colorAssets().objectEnumerator();
+      colorsArray = NSMutableArray.alloc().init();
+      while (color = documentColorAssets.nextObject()) {
+        colorsArray.addObject(color.color());
+      }
+      this.colors = colorsArray;
     }
   }
 

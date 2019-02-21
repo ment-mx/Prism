@@ -20,7 +20,11 @@ class Palette extends Base
         @artboard = layer
 
     if @context.document
-      @colors = @context.document.documentData().assets().colors()
+      documentColorAssets = @context.document.documentData().assets().colorAssets().objectEnumerator()
+      colorsArray = NSMutableArray.alloc().init()
+      while color = documentColorAssets.nextObject()
+        colorsArray.addObject(color.color())
+      @colors = colorsArray
 
   regenerate: ->
     array = @getColorsDictionaries().map (colorDictionary) ->
