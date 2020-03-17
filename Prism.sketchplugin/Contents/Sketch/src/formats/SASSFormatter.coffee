@@ -9,5 +9,5 @@ class SASSFormatter extends FormatterBase
 
   formatText: (color, commented) ->
     formattedColor = '#' + color.hex
-    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "")
+    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "").replace(".", "")
     "#{sassVariableName}: #{formattedColor};"

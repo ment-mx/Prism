@@ -276,7 +276,7 @@ SASSFormatter = (function(superClass) {
   SASSFormatter.prototype.formatText = function(color, commented) {
     var formattedColor, sassVariableName;
     formattedColor = '#' + color.hex;
-    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "");
+    sassVariableName = '$' + color.name.toLowerCase().trim().split(" ").join("-").replace("'", "").replace(".", "");
     return sassVariableName + ": " + formattedColor + ";";
   };
 
