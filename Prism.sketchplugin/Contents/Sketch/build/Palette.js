@@ -51,7 +51,7 @@ Palette = (function(superClass) {
   };
 
   Palette.prototype.generate = function() {
-    var bounds, cell, color, column, i, j, name, ref, ref1, row;
+    var bounds, cell, color, colorInfoMap, column, i, j, name, ref, ref1, ref2, row;
     if (this.colors.count() === 0) {
       NSApplication.sharedApplication().displayDialog_withTitle("There are no colors on your Document Colors.", "Feed me colors!");
     }
@@ -62,6 +62,7 @@ Palette = (function(superClass) {
       this.command.setValue_forKey_onLayer_forPluginIdentifier(true, this.ARTBOARD_TAG, this.artboard, this.pluginID);
     }
     this.artboard.removeAllLayers();
+    colorInfoMap = documentColorMap(this.context.document);
     row = 0;
     column = 0;
     for (i = j = 0, ref = this.colors.count(); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
@@ -71,7 +72,7 @@ Palette = (function(superClass) {
       }
       color = this.colors[i];
       cell = new Cell(this.context);
-      name = (ref1 = this.aliasForColor(color)) != null ? ref1 : this.colorClassifier.classify(color.immutableModelObject().hexValue());
+      name = (ref1 = (ref2 = this.documentColorName(colorInfoMap, color)) != null ? ref2 : this.aliasForColor(color)) != null ? ref1 : this.colorClassifier.classify(color.immutableModelObject().hexValue());
       cell.setColor_withName(color, name);
       cell.setX((cell.width + this.CELL_SPACING) * column + this.CELL_SPACING);
       cell.setY((cell.height + this.CELL_SPACING) * row + this.CELL_SPACING);
@@ -114,6 +115,16 @@ Palette = (function(superClass) {
 
   Palette.prototype.aliasForColor = function(color) {
     return this.valueForKey_onLayer(color.immutableModelObject().hexValue(), this.artboard);
+  };
+
+  Palette.prototype.documentColorName = function(dict, color) {
+    var name;
+    if (dict) {
+      name = dict.objectForKey(color.immutableModelObject().hexValue()).displayName();
+      if (name.length() > 0) {
+        return name;
+      }
+    }
   };
 
   return Palette;

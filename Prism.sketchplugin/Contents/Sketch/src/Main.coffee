@@ -25,13 +25,23 @@ colorNameChanged = (context) ->
   inPalette = context.command.valueForKey_onLayer_forPluginIdentifier( Palette::ARTBOARD_TAG , artboard, pluginID )
   return unless colorValue && inPalette
 
+  document = require('sketch/dom').getSelectedDocument().sketchObject
+
   #If the new text is empty, remove the alias for that color value, otherwise save the alias
   if "#{newText}".trim() != ""
     #Save alias
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID )
+
+    #Rename Document Color
+    colorInfoMap = documentColorMap(document)
+    colorAsset = colorInfoMap.objectForKey(colorValue)
+    colorAsset.name = newText
   else
     #Remove Alias
     context.command.setValue_forKey_onLayer_forPluginIdentifier(null, colorValue, artboard, pluginID )
+
+  # Add document to context to propely generate palette
+  context["document"] = document
 
   #Load Palette and regenerate
   palette = new Palette(context,textLayer)

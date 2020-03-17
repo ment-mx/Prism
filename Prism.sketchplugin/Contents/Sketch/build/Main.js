@@ -22,7 +22,7 @@ generatePalette = function(context) {
  */
 
 colorNameChanged = function(context) {
-  var artboard, colorValue, inPalette, newText, palette, pluginID, textLayer;
+  var artboard, colorAsset, colorInfoMap, colorValue, document, inPalette, newText, palette, pluginID, textLayer;
   log("Color Name Changed...");
   textLayer = context.actionContext.layer;
   artboard = textLayer.parentArtboard();
@@ -33,11 +33,16 @@ colorNameChanged = function(context) {
   if (!(colorValue && inPalette)) {
     return;
   }
+  document = require('sketch/dom').getSelectedDocument().sketchObject;
   if (("" + newText).trim() !== "") {
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID);
+    colorInfoMap = documentColorMap(document);
+    colorAsset = colorInfoMap.objectForKey(colorValue);
+    colorAsset.name = newText;
   } else {
     context.command.setValue_forKey_onLayer_forPluginIdentifier(null, colorValue, artboard, pluginID);
   }
+  context["document"] = document;
   palette = new Palette(context, textLayer);
   return palette.regenerate();
 };

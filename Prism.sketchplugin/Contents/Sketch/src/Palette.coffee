@@ -44,6 +44,9 @@ class Palette extends Base
 
     @artboard.removeAllLayers()
 
+    # Generate Document Color Name mapping dictionary
+    colorInfoMap = documentColorMap(@context.document)
+
     # Palette Generation
     row = 0
     column = 0
@@ -53,8 +56,8 @@ class Palette extends Base
       #Cell setup
       color = @colors[i]
       cell = new Cell(@context)
-      #If there's an alias defined then use it, otherwise use the color classifier.
-      name = @aliasForColor(color) ? @colorClassifier.classify(color.immutableModelObject().hexValue())
+      #If there's named document color then use it, otherwise an alias defined then use it, finally use the color classifier.
+      name = @documentColorName(colorInfoMap, color) ? @aliasForColor(color) ? @colorClassifier.classify(color.immutableModelObject().hexValue())
       cell.setColor_withName( color, name )
       cell.setX((cell.width + @CELL_SPACING) * column + @CELL_SPACING)
       cell.setY((cell.height + @CELL_SPACING) * row + @CELL_SPACING)
@@ -91,3 +94,9 @@ class Palette extends Base
 
   aliasForColor: (color) ->
     @valueForKey_onLayer(color.immutableModelObject().hexValue(),@artboard)
+  
+  documentColorName: (dict, color) ->
+    if dict 
+      name = dict.objectForKey(color.immutableModelObject().hexValue()).displayName()
+      if name.length() > 0
+        return name
