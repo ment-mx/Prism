@@ -10,7 +10,7 @@ documentColorMap = (document) ->
     documentColorAssets = document.documentData().assets().colorAssets().objectEnumerator()
     colorInfoMap = NSMutableDictionary.alloc().init()
     while colorAsset = documentColorAssets.nextObject()
-      hex = colorAsset.color().immutableModelObject().hexValue()
-      unless colorInfoMap.objectForKey(hex)
-        colorInfoMap.setObject_forKey(colorAsset, hex)
+      color = colorAsset.color().immutableModelObject()
+      unless colorInfoMap.objectForKey(color)
+        colorInfoMap.setObject_forKey(colorAsset, color)
     return colorInfoMap

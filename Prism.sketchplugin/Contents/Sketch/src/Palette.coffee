@@ -97,6 +97,6 @@ class Palette extends Base
   
   documentColorName: (dict, color) ->
     if dict 
-      name = dict.objectForKey(color.immutableModelObject().hexValue()).displayName()
+      name = dict.objectForKey(color.immutableModelObject()).displayName()
       if name.length() > 0
         return name

@@ -120,7 +120,7 @@ Palette = (function(superClass) {
   Palette.prototype.documentColorName = function(dict, color) {
     var name;
     if (dict) {
-      name = dict.objectForKey(color.immutableModelObject().hexValue()).displayName();
+      name = dict.objectForKey(color.immutableModelObject()).displayName();
       if (name.length() > 0) {
         return name;
       }

@@ -12,14 +12,14 @@ helperHex = function(val) {
 };
 
 documentColorMap = function(document) {
-  var colorAsset, colorInfoMap, documentColorAssets, hex;
+  var color, colorAsset, colorInfoMap, documentColorAssets;
   if (document) {
     documentColorAssets = document.documentData().assets().colorAssets().objectEnumerator();
     colorInfoMap = NSMutableDictionary.alloc().init();
     while (colorAsset = documentColorAssets.nextObject()) {
-      hex = colorAsset.color().immutableModelObject().hexValue();
-      if (!colorInfoMap.objectForKey(hex)) {
-        colorInfoMap.setObject_forKey(colorAsset, hex);
+      color = colorAsset.color().immutableModelObject();
+      if (!colorInfoMap.objectForKey(color)) {
+        colorInfoMap.setObject_forKey(colorAsset, color);
       }
     }
     return colorInfoMap;
