@@ -21,19 +21,16 @@ class Palette extends Base
 
     if @context.document
       documentColorAssets = @context.document.documentData().assets().colorAssets().objectEnumerator()
-      colorsArray = NSMutableArray.alloc().init()
-      while color = documentColorAssets.nextObject()
-        colorsArray.addObject(color.color())
-      @colors = colorsArray
+      colorAssets = NSMutableArray.alloc().init()
+      while colorAsset = documentColorAssets.nextObject()
+        colorAssets.addObject(colorAsset)
+      @colorAssets = colorAssets
 
   regenerate: ->
-    array = @getColorsDictionaries().map (colorDictionary) ->
-      ColorFormatter.dictionaryToColor(colorDictionary)
-    @colors = NSArray.alloc().initWithArray(array)
     @generate()
 
   generate: ->
-    NSApplication.sharedApplication().displayDialog_withTitle("There are no colors on your Document Colors.", "Feed me colors!") if @colors.count() == 0
+    NSApplication.sharedApplication().displayDialog_withTitle("There are no colors on your Document Colors.", "Feed me colors!") if @colorAssets.count() == 0
 
     #If it wasn't found, then create it.
     unless @artboard
@@ -45,19 +42,20 @@ class Palette extends Base
     @artboard.removeAllLayers()
 
     # Generate Document Color Name mapping dictionary
-    colorInfoMap = documentColorMap(@context.document)
+    colorAssetRepo = new ColorAssetRepository(@context.document)
 
     # Palette Generation
     row = 0
     column = 0
-    for i in [0...@colors.count()]
+    for i in [0...@colorAssets.count()]
       #If in the last column, reset column and increment row...
       (column = 0; row++) if column >= @COLORS_PER_ROW
       #Cell setup
-      color = @colors[i]
+      colorAsset = @colorAssets[i]
+      color = colorAsset.color()
       cell = new Cell(@context)
       #If there's named document color then use it, otherwise an alias defined then use it, finally use the color classifier.
-      name = @documentColorName(colorInfoMap, color) ? @aliasForColor(color) ? @colorClassifier.classify(color.immutableModelObject().hexValue())
+      name = @documentColorName(colorAsset) ? @aliasForColor(color) ? @colorClassifier.classify(color.immutableModelObject().hexValue())
       cell.setColor_withName( color, name )
       cell.setX((cell.width + @CELL_SPACING) * column + @CELL_SPACING)
       cell.setY((cell.height + @CELL_SPACING) * row + @CELL_SPACING)
@@ -66,7 +64,7 @@ class Palette extends Base
       column++
 
     @artboard.frame().setHeight((cell.height + @CELL_SPACING) * (row+1) + @CELL_SPACING)
-    @artboard.frame().setWidth((cell.width + @CELL_SPACING) * Math.min(@colors.count(),@COLORS_PER_ROW) + @CELL_SPACING)
+    @artboard.frame().setWidth((cell.width + @CELL_SPACING) * Math.min(@colorAssets.count(),@COLORS_PER_ROW) + @CELL_SPACING)
 
     #Position Artboard
     @artboard.removeFromParent()
@@ -95,8 +93,7 @@ class Palette extends Base
   aliasForColor: (color) ->
     @valueForKey_onLayer(color.immutableModelObject().hexValue(),@artboard)
   
-  documentColorName: (dict, color) ->
-    if dict 
-      name = dict.objectForKey(color.immutableModelObject()).displayName()
-      if name.length() > 0
-        return name
+  documentColorName: (colorAsset) ->
+    name = colorAsset.displayName()
+    if name.length() > 0
+      return name

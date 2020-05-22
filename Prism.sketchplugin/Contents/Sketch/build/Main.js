@@ -22,11 +22,13 @@ generatePalette = function(context) {
  */
 
 colorNameChanged = function(context) {
-  var artboard, colorAsset, colorInfoMap, colorValue, document, inPalette, newText, palette, pluginID, textLayer;
+  var artboard, color, colorAsset, colorAssetRepo, colorDict, colorValue, document, inPalette, newText, oldText, palette, parentLayer, pluginID, textLayer;
   log("Color Name Changed...");
   textLayer = context.actionContext.layer;
+  parentLayer = textLayer.parentGroup();
   artboard = textLayer.parentArtboard();
   newText = context.actionContext["new"];
+  oldText = context.actionContext.old;
   pluginID = context.plugin.identifier();
   colorValue = context.command.valueForKey_onLayer_forPluginIdentifier(Cell.prototype.TEXT_LAYER_TAG, textLayer, pluginID);
   inPalette = context.command.valueForKey_onLayer_forPluginIdentifier(Palette.prototype.ARTBOARD_TAG, artboard, pluginID);
@@ -36,8 +38,10 @@ colorNameChanged = function(context) {
   document = require('sketch/dom').getSelectedDocument().sketchObject;
   if (("" + newText).trim() !== "") {
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID);
-    colorInfoMap = documentColorMap(document);
-    colorAsset = colorInfoMap.objectForKey(colorValue);
+    colorAssetRepo = new ColorAssetRepository(document);
+    colorDict = context.command.valueForKey_onLayer_forPluginIdentifier(Cell.prototype.CELL_LAYER_TAG, parentLayer, pluginID);
+    color = ColorFormatter.dictionaryToColor(colorDict).immutableModelObject();
+    colorAsset = colorAssetRepo.colorAssetByName(("" + oldText).trim());
     colorAsset.name = newText;
   } else {
     context.command.setValue_forKey_onLayer_forPluginIdentifier(null, colorValue, artboard, pluginID);

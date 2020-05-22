@@ -16,8 +16,10 @@ generatePalette = (context) ->
 colorNameChanged = (context) ->
   log "Color Name Changed..."
   textLayer = context.actionContext.layer
+  parentLayer = textLayer.parentGroup()
   artboard = textLayer.parentArtboard()
   newText = context.actionContext.new # The new value for the changed text layer
+  oldText = context.actionContext.old # The old value for the changed text layer
   pluginID = context.plugin.identifier() # Plugin ID for saving data
 
   #Be sure that text layer has a colorValue and its parent artboard is in fact the Prism Palette.
@@ -33,8 +35,10 @@ colorNameChanged = (context) ->
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID )
 
     #Rename Document Color
-    colorInfoMap = documentColorMap(document)
-    colorAsset = colorInfoMap.objectForKey(colorValue)
+    colorAssetRepo = new ColorAssetRepository(document)
+    colorDict = context.command.valueForKey_onLayer_forPluginIdentifier( Cell::CELL_LAYER_TAG , parentLayer, pluginID )
+    color = ColorFormatter.dictionaryToColor(colorDict).immutableModelObject()
+    colorAsset = colorAssetRepo.colorAssetByName("#{oldText}".trim())
     colorAsset.name = newText
   else
     #Remove Alias
