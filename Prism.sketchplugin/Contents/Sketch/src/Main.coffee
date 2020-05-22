@@ -16,8 +16,10 @@ generatePalette = (context) ->
 colorNameChanged = (context) ->
   log "Color Name Changed..."
   textLayer = context.actionContext.layer
+  parentLayer = textLayer.parentGroup()
   artboard = textLayer.parentArtboard()
   newText = context.actionContext.new # The new value for the changed text layer
+  oldText = context.actionContext.old # The old value for the changed text layer
   pluginID = context.plugin.identifier() # Plugin ID for saving data
 
   #Be sure that text layer has a colorValue and its parent artboard is in fact the Prism Palette.
@@ -25,13 +27,25 @@ colorNameChanged = (context) ->
   inPalette = context.command.valueForKey_onLayer_forPluginIdentifier( Palette::ARTBOARD_TAG , artboard, pluginID )
   return unless colorValue && inPalette
 
+  document = require('sketch/dom').getSelectedDocument().sketchObject
+
   #If the new text is empty, remove the alias for that color value, otherwise save the alias
   if "#{newText}".trim() != ""
     #Save alias
     context.command.setValue_forKey_onLayer_forPluginIdentifier(newText, colorValue, artboard, pluginID )
+
+    #Rename Document Color
+    colorAssetRepo = new ColorAssetRepository(document)
+    colorDict = context.command.valueForKey_onLayer_forPluginIdentifier( Cell::CELL_LAYER_TAG , parentLayer, pluginID )
+    color = ColorFormatter.dictionaryToColor(colorDict).immutableModelObject()
+    colorAsset = colorAssetRepo.colorAssetByName("#{oldText}".trim())
+    colorAsset.name = newText
   else
     #Remove Alias
     context.command.setValue_forKey_onLayer_forPluginIdentifier(null, colorValue, artboard, pluginID )
+
+  # Add document to context to propely generate palette
+  context["document"] = document
 
   #Load Palette and regenerate
   palette = new Palette(context,textLayer)

@@ -17,7 +17,7 @@ Palette = (function(superClass) {
   Palette.prototype.colorClassifier = new ColorClassifier();
 
   function Palette(context, layer) {
-    var children, color, colorsArray, documentColorAssets, i, j, ref;
+    var children, colorAsset, colorAssets, documentColorAssets, i, j, ref;
     if (layer == null) {
       layer = null;
     }
@@ -33,26 +33,21 @@ Palette = (function(superClass) {
     }
     if (this.context.document) {
       documentColorAssets = this.context.document.documentData().assets().colorAssets().objectEnumerator();
-      colorsArray = NSMutableArray.alloc().init();
-      while (color = documentColorAssets.nextObject()) {
-        colorsArray.addObject(color.color());
+      colorAssets = NSMutableArray.alloc().init();
+      while (colorAsset = documentColorAssets.nextObject()) {
+        colorAssets.addObject(colorAsset);
       }
-      this.colors = colorsArray;
+      this.colorAssets = colorAssets;
     }
   }
 
   Palette.prototype.regenerate = function() {
-    var array;
-    array = this.getColorsDictionaries().map(function(colorDictionary) {
-      return ColorFormatter.dictionaryToColor(colorDictionary);
-    });
-    this.colors = NSArray.alloc().initWithArray(array);
     return this.generate();
   };
 
   Palette.prototype.generate = function() {
-    var bounds, cell, color, column, i, j, name, ref, ref1, row;
-    if (this.colors.count() === 0) {
+    var bounds, cell, color, colorAsset, colorAssetRepo, column, i, j, name, ref, ref1, ref2, row;
+    if (this.colorAssets.count() === 0) {
       NSApplication.sharedApplication().displayDialog_withTitle("There are no colors on your Document Colors.", "Feed me colors!");
     }
     if (!this.artboard) {
@@ -62,16 +57,18 @@ Palette = (function(superClass) {
       this.command.setValue_forKey_onLayer_forPluginIdentifier(true, this.ARTBOARD_TAG, this.artboard, this.pluginID);
     }
     this.artboard.removeAllLayers();
+    colorAssetRepo = new ColorAssetRepository(this.context.document);
     row = 0;
     column = 0;
-    for (i = j = 0, ref = this.colors.count(); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+    for (i = j = 0, ref = this.colorAssets.count(); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
       if (column >= this.COLORS_PER_ROW) {
         column = 0;
         row++;
       }
-      color = this.colors[i];
+      colorAsset = this.colorAssets[i];
+      color = colorAsset.color();
       cell = new Cell(this.context);
-      name = (ref1 = this.aliasForColor(color)) != null ? ref1 : this.colorClassifier.classify(color.immutableModelObject().hexValue());
+      name = (ref1 = (ref2 = this.documentColorName(colorAsset)) != null ? ref2 : this.aliasForColor(color)) != null ? ref1 : this.colorClassifier.classify(color.immutableModelObject().hexValue());
       cell.setColor_withName(color, name);
       cell.setX((cell.width + this.CELL_SPACING) * column + this.CELL_SPACING);
       cell.setY((cell.height + this.CELL_SPACING) * row + this.CELL_SPACING);
@@ -79,7 +76,7 @@ Palette = (function(superClass) {
       column++;
     }
     this.artboard.frame().setHeight((cell.height + this.CELL_SPACING) * (row + 1) + this.CELL_SPACING);
-    this.artboard.frame().setWidth((cell.width + this.CELL_SPACING) * Math.min(this.colors.count(), this.COLORS_PER_ROW) + this.CELL_SPACING);
+    this.artboard.frame().setWidth((cell.width + this.CELL_SPACING) * Math.min(this.colorAssets.count(), this.COLORS_PER_ROW) + this.CELL_SPACING);
     this.artboard.removeFromParent();
     bounds = this.currentPage.contentBounds();
     this.artboard.frame().setX(bounds.origin.x - this.artboard.frame().width() - this.PALETTE_SPACING);
@@ -114,6 +111,14 @@ Palette = (function(superClass) {
 
   Palette.prototype.aliasForColor = function(color) {
     return this.valueForKey_onLayer(color.immutableModelObject().hexValue(), this.artboard);
+  };
+
+  Palette.prototype.documentColorName = function(colorAsset) {
+    var name;
+    name = colorAsset.displayName();
+    if (name.length() > 0) {
+      return name;
+    }
   };
 
   return Palette;

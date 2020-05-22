@@ -4,6 +4,7 @@
 @import "build/Formats.js";
 @import "build/Helpers.js";
 @import "build/ColorFormatter.js";
+@import "build/ColorAssetRepository.js";
 @import "build/Base.js";
 @import "build/Cell.js";
 @import "build/Palette.js";
